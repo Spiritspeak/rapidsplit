@@ -1,0 +1,26 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1637758636067.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3313431517",
+    "id" : "B76F40E0",
+    "lastKnownWriteTime" : 1637758894,
+    "last_content_update" : 1637758894241,
+    "path" : "C:/Users/b1066151/Nextcloud/AAT/AATREL_project/data/rapidsplit/R/rapidsplit.R",
+    "project_path" : "R/rapidsplit.R",
+    "properties" : {
+        "cursorPosition" : "3,24",
+        "scrollLine" : "0",
+        "tempName" : "Untitled1"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 4,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

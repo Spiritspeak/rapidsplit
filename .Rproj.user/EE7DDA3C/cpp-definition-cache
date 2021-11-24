@@ -1,0 +1,26 @@
+[
+    {
+        "definitions" : [
+            {
+                "column" : 15,
+                "file" : "C:/Users/b1066151/Nextcloud/AAT/AATREL_project/data/rapidsplit/src/applyItersplits.cpp",
+                "kind" : 6,
+                "line" : 5,
+                "name" : "itersplits(int, Rcpp::NumericVector)",
+                "parent_name" : "",
+                "usr" : "c:@F@itersplits#I#I#"
+            },
+            {
+                "column" : 6,
+                "file" : "C:/Users/b1066151/Nextcloud/AAT/AATREL_project/data/rapidsplit/src/applyItersplits.cpp",
+                "kind" : 6,
+                "line" : 22,
+                "name" : "applyItersplits(int, Rcpp::List)",
+                "parent_name" : "",
+                "usr" : "c:@F@applyItersplits#I#I#"
+            }
+        ],
+        "file" : "C:/Users/b1066151/Nextcloud/AAT/AATREL_project/data/rapidsplit/src/applyItersplits.cpp",
+        "file_last_write" : 1637759531.000000
+    }
+]
