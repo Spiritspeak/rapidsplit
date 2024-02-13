@@ -1,9 +1,9 @@
 {
-    "path" : "C:/Users/b1066151/Nextcloud/AAT/AATREL_project/data/rapidsplit/rapidsplit",
-    "sortOrder" : [
+    "path": "X:/AATREL_project/data/rapidsplit",
+    "sortOrder": [
         {
-            "ascending" : true,
-            "columnIndex" : 2
+            "columnIndex": 2,
+            "ascending": true
         }
     ]
 }

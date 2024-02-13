@@ -1,26 +1,148 @@
 [
     {
-        "definitions" : [
+        "file": "X:/AATREL_project/data/rapidsplit/src/applyItersplits.cpp",
+        "file_last_write": 1673455132.0,
+        "definitions": [
             {
-                "column" : 15,
-                "file" : "C:/Users/b1066151/Nextcloud/AAT/AATREL_project/data/rapidsplit/src/applyItersplits.cpp",
-                "kind" : 6,
-                "line" : 5,
-                "name" : "itersplits(int, Rcpp::NumericVector)",
-                "parent_name" : "",
-                "usr" : "c:@F@itersplits#I#I#"
+                "usr": "c:@F@itersplits#I#I#b#",
+                "kind": 6,
+                "parent_name": "",
+                "name": "itersplits(int, Rcpp::NumericVector, bool)",
+                "file": "X:/AATREL_project/data/rapidsplit/src/applyItersplits.cpp",
+                "line": 5,
+                "column": 15
             },
             {
-                "column" : 6,
-                "file" : "C:/Users/b1066151/Nextcloud/AAT/AATREL_project/data/rapidsplit/src/applyItersplits.cpp",
-                "kind" : 6,
-                "line" : 22,
-                "name" : "applyItersplits(int, Rcpp::List)",
-                "parent_name" : "",
-                "usr" : "c:@F@applyItersplits#I#I#"
+                "usr": "c:@F@colMedians#I#",
+                "kind": 6,
+                "parent_name": "",
+                "name": "colMedians(Rcpp::NumericMatrix)",
+                "file": "X:/AATREL_project/data/rapidsplit/src/applyItersplits.cpp",
+                "line": 21,
+                "column": 15
+            },
+            {
+                "usr": "c:@F@colMedians_mask#I#I#",
+                "kind": 6,
+                "parent_name": "",
+                "name": "colMedians_mask(Rcpp::NumericMatrix, Rcpp::LogicalMatrix)",
+                "file": "X:/AATREL_project/data/rapidsplit/src/applyItersplits.cpp",
+                "line": 37,
+                "column": 15
+            },
+            {
+                "usr": "c:@F@mediansByMask#I#I#",
+                "kind": 6,
+                "parent_name": "",
+                "name": "mediansByMask(Rcpp::NumericVector, Rcpp::LogicalMatrix)",
+                "file": "X:/AATREL_project/data/rapidsplit/src/applyItersplits.cpp",
+                "line": 54,
+                "column": 15
+            },
+            {
+                "usr": "c:@F@colMeans_mask#I#I#",
+                "kind": 6,
+                "parent_name": "",
+                "name": "colMeans_mask(Rcpp::NumericMatrix, Rcpp::LogicalMatrix)",
+                "file": "X:/AATREL_project/data/rapidsplit/src/applyItersplits.cpp",
+                "line": 69,
+                "column": 15
+            },
+            {
+                "usr": "c:@F@meansByMask#I#I#",
+                "kind": 6,
+                "parent_name": "",
+                "name": "meansByMask(Rcpp::NumericVector, Rcpp::LogicalMatrix)",
+                "file": "X:/AATREL_project/data/rapidsplit/src/applyItersplits.cpp",
+                "line": 86,
+                "column": 15
+            },
+            {
+                "usr": "c:@F@colSds#I#",
+                "kind": 6,
+                "parent_name": "",
+                "name": "colSds(Rcpp::NumericMatrix)",
+                "file": "X:/AATREL_project/data/rapidsplit/src/applyItersplits.cpp",
+                "line": 105,
+                "column": 15
+            },
+            {
+                "usr": "c:@F@colSds_mask#I#I#",
+                "kind": 6,
+                "parent_name": "",
+                "name": "colSds_mask(Rcpp::NumericMatrix, Rcpp::LogicalMatrix)",
+                "file": "X:/AATREL_project/data/rapidsplit/src/applyItersplits.cpp",
+                "line": 120,
+                "column": 15
+            },
+            {
+                "usr": "c:@F@sdsByMask#I#I#",
+                "kind": 6,
+                "parent_name": "",
+                "name": "sdsByMask(Rcpp::NumericVector, Rcpp::LogicalMatrix)",
+                "file": "X:/AATREL_project/data/rapidsplit/src/applyItersplits.cpp",
+                "line": 137,
+                "column": 15
+            },
+            {
+                "usr": "c:@F@ExcludeSDOutliers#I#I#d#",
+                "kind": 6,
+                "parent_name": "",
+                "name": "ExcludeSDOutliers(Rcpp::NumericVector, Rcpp::LogicalMatrix, double)",
+                "file": "X:/AATREL_project/data/rapidsplit/src/applyItersplits.cpp",
+                "line": 159,
+                "column": 15
+            },
+            {
+                "usr": "c:@F@ExcludeSDOutliers_nomask#I#d#",
+                "kind": 6,
+                "parent_name": "",
+                "name": "ExcludeSDOutliers_nomask(Rcpp::NumericMatrix, double)",
+                "file": "X:/AATREL_project/data/rapidsplit/src/applyItersplits.cpp",
+                "line": 187,
+                "column": 15
+            },
+            {
+                "usr": "c:@F@applyItersplits#I#I#b#",
+                "kind": 6,
+                "parent_name": "",
+                "name": "applyItersplits(int, Rcpp::List, bool)",
+                "file": "X:/AATREL_project/data/rapidsplit/src/applyItersplits.cpp",
+                "line": 219,
+                "column": 6
+            },
+            {
+                "usr": "c:@F@stratified_itersplits#I#I#",
+                "kind": 6,
+                "parent_name": "",
+                "name": "stratified_itersplits(int, Rcpp::IntegerVector)",
+                "file": "X:/AATREL_project/data/rapidsplit/src/applyItersplits.cpp",
+                "line": 241,
+                "column": 15
+            },
+            {
+                "usr": "c:@F@corByColumns#I#I#",
+                "kind": 6,
+                "parent_name": "",
+                "name": "corByColumns(Rcpp::NumericMatrix, Rcpp::NumericMatrix)",
+                "file": "X:/AATREL_project/data/rapidsplit/src/applyItersplits.cpp",
+                "line": 304,
+                "column": 15
+            },
+            {
+                "usr": "c:@F@corByColumns_mask#I#I#I#",
+                "kind": 6,
+                "parent_name": "",
+                "name": "corByColumns_mask(Rcpp::NumericMatrix, Rcpp::NumericMatrix, Rcpp::LogicalMatrix)",
+                "file": "X:/AATREL_project/data/rapidsplit/src/applyItersplits.cpp",
+                "line": 328,
+                "column": 15
             }
-        ],
-        "file" : "C:/Users/b1066151/Nextcloud/AAT/AATREL_project/data/rapidsplit/src/applyItersplits.cpp",
-        "file_last_write" : 1637759531.000000
+        ]
+    },
+    {
+        "file": "X:/AATREL_project/data/rapidsplit/src/itersplits.cpp",
+        "file_last_write": 1637765374.0,
+        "definitions": []
     }
 ]

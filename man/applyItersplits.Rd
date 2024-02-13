@@ -4,7 +4,7 @@
 \alias{applyItersplits}
 \title{applyItersplits}
 \usage{
-applyItersplits(iters, splits)
+applyItersplits(iters, splits, replace = FALSE)
 }
 \arguments{
 \item{iters}{number of iterations}

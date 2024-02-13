@@ -34,9 +34,6 @@ rapidsplit(
 
 \item{standardize}{divide by sd or not}
 }
-\value{
-
-}
 \examples{
 print("no example")
 }
