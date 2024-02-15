@@ -1,7 +1,7 @@
 
 cols2ids<-function(df){
   for(col in seq_along(df)){
-    df[,col]<-df[,col] |> as.factor() |> as.numeric()
+    df[,col]<-as.numeric(as.factor(df[,col]))
   }
   df
 }
@@ -49,15 +49,15 @@ rapidsplit<-function(ds,subjvar,diffvars=NULL,stratvars=NULL,rtvar,iters,
   arr.ds[[".diffidx"]]<-interaction(arr.ds[c(subjvar,diffvars)],lex.order=T)
   
   pps<-unique(arr.ds[,subjvar])
-  diffidx<-arr.ds[c(subjvar,diffvars,".diffidx")] |> unique()
+  diffidx<-unique(arr.ds[c(subjvar,diffvars,".diffidx")])
   subjlist<-split(arr.ds,arr.ds[[subjvar]])
   difflist<-split(arr.ds,arr.ds[[".diffidx"]])
   
   # Stratify by subject
-  origkeys<-vector(mode="list",length=length(pps)) |> setNames(pps)
+  origkeys<-setNames(vector(mode="list",length=length(pps)),pps)
   for(sj in pps){
     iterds<-arr.ds[arr.ds[[subjvar]]==sj,c(diffvars,stratvars),drop=F]
-    iterrle<-iterds |> cols2ids() |> do.call(paste,args=_) |> rle()
+    iterrle<-rle(do.call(paste,args=cols2ids(iterds)))
     grsizes<-iterrle$lengths
     if(length(grsizes)==0){grsizes<-nrow(iterds)}
     origkeys[[sj]]<-stratified_itersplits(itercount=iters, groupsizes=grsizes)
@@ -85,13 +85,13 @@ rapidsplit<-function(ds,subjvar,diffvars=NULL,stratvars=NULL,rtvar,iters,
   
   # Get scores
   if(length(diffvars)>0){
-    diffidx[[".valence"]]<-diffidx[diffvars] |> clamp.range() |> Reduce(`*`,x=_)
-    keyscores<-sapply(pps,function(pp){
+    diffidx[[".valence"]]<-Reduce(`*`,x=clamp.range(diffidx[diffvars]))
+    keyscores<-t(sapply(pps,function(pp){
       colSums(keymeans[diffidx[[subjvar]]==pp,] * diffidx[[".valence"]][diffidx[[subjvar]]==pp])
-    }) |> t()
-    antikeyscores<-sapply(pps,function(pp){
+    }))
+    antikeyscores<-t(sapply(pps,function(pp){
       colSums(antikeymeans[diffidx[[subjvar]]==pp,] * diffidx[[".valence"]][diffidx[[subjvar]]==pp])
-    }) |> t()
+    }))
   }else{
     keyscores<-keymeans
     antikeyscores<-antikeymeans
