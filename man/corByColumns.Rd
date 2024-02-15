@@ -10,7 +10,7 @@ corByColumns(mat1, mat2)
 corByColumns_mask(mat1, mat2, mask)
 }
 \arguments{
-\item{mat1, mat2}{Matrices to correlate}
+\item{mat1, mat2}{Matrices whose values to correlate by column}
 
 \item{mask}{Logical matrix marking which data points to include}
 }

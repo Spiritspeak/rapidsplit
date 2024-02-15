@@ -2,15 +2,6 @@
 #include <Rcpp.h>
 using namespace Rcpp;
 
-NumericMatrix itersplits(int x, NumericVector y, bool replace=false){
-  int ysize = y.size();
-  NumericMatrix itermat (ysize,x);
-  for(int i = 0; i < x; i++) {
-    itermat(_,i) = Rcpp::sample(y, ysize, replace);
-  }
-  return itermat;
-}
-
 //' colMedians
 //' 
 //' get column medians
@@ -207,6 +198,14 @@ LogicalMatrix ExcludeSDOutliers_nomask(NumericMatrix mat, double sdlim = 3){
   return newmask;
 }
 
+IntegerMatrix itersplits(int x, IntegerVector y, bool replace=false){
+  int ysize = y.size();
+  IntegerMatrix itermat (ysize,x);
+  for(int i = 0; i < x; i++) {
+    itermat(_,i) = Rcpp::sample(y, ysize, replace);
+  }
+  return itermat;
+}
 
 //' applyItersplits
 //' 
@@ -214,6 +213,7 @@ LogicalMatrix ExcludeSDOutliers_nomask(NumericMatrix mat, double sdlim = 3){
 //'
 //' @param iters number of iterations
 //' @param splits list of vectors of row numbers
+//' @param replace Sample without (default) or with replacement
 //' @export
 // [[Rcpp::export]]
 List applyItersplits(int iters, List splits, bool replace=false){
@@ -297,7 +297,7 @@ IntegerMatrix stratified_itersplits(int itercount, IntegerVector groupsizes){
 //' 
 //' Correlate each column of 1 matrix with the same column in another matrix
 //'
-//' @param mat1,mat2 Matrices to correlate
+//' @param mat1,mat2 Matrices whose values to correlate by column
 //' @returns A numeric vector of correlations per column
 //' @export
 // [[Rcpp::export]]
@@ -309,7 +309,7 @@ NumericVector corByColumns(NumericMatrix mat1, NumericMatrix mat2){
     NumericVector currmat1 = mat1.column(i);
     NumericVector currmat2 = mat2.column(i);
     
-    LogicalVector incl = !is_na(currmat1) & !is_na(currmat2);
+    LogicalVector incl = (!is_na(currmat1)) & (!is_na(currmat2));
     currmat1 = currmat1[incl];
     currmat2 = currmat2[incl];
     double currn = sum(incl);

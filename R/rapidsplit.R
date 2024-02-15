@@ -1,212 +1,121 @@
 
+cols2ids<-function(df){
+  for(col in seq_along(df)){
+    df[,col]<-df[,col] |> as.factor() |> as.numeric()
+  }
+  df
+}
+
+clamp.range<-function(x){
+  x[x==min(x)]<- -1
+  x[x==max(x)]<- 1
+  x
+}
 
 #' rapidsplit
-#' ultra fast split-half
+#' @description A very fast algorithm for permutated split-half reliability
 #'
-#' @param ds dataset
-#' @param subjvar subject var name
-#' @param pullvar movement direction var name
-#' @param targetvar stim type var name
-#' @param rtvar rt varname
-#' @param iters n iterations
-#' @param agg means or medians
-#' @param standardize divide by sd or not
+#' @param ds Dataset, a \code{data.frame}
+#' @param subjvar Subject ID variable name, a \code{character}
+#' @param diffvars Variables that determine which conditions 
+#' need to be subtracted from each other, a \code{character}
+#' @param stratvars Additional variables that the splits should 
+#' be stratified by, if possible; a \code{character}
+#' @param rtvar Reaction time variable name, a \code{character}
+#' @param iters Number of split-halves to average, an \code{integer}
+#' @param agg The function by which to aggregate the RTs; can be \code{"means"} or \code{"medians"}
+#' @param standardize Whether to divide by scores by the subject's SD; a \code{logical}
 #'
-#' @return
+#' @return A \code{list} containing the averaged reliability as well as 
+#' a vector with the reliability of each iteration
 #' @export
 #'
 #' @examples
 #' print("no example")
-rapidsplit<-function(ds,subjvar,pullvar,targetvar,rtvar,iters,agg=c("means","medians"),standardize=F){
+rapidsplit<-function(ds,subjvar,diffvars=NULL,stratvars=NULL,rtvar,iters,
+                     agg=c("means","medians"),standardize=F){
+  agg<-match.arg(agg)
   if(agg=="means"){
-    aggfunc<-colMeans
+    aggfunc<-meansByMask
   }else if(agg=="medians"){
-    aggfunc<-colMedians
+    aggfunc<-mediansByMask
   }
   
-  #Stratify the split
-  presplit<-split(seq_len(nrow(ds)),ds[c(subjvar,pullvar,targetvar)])
+  # Arrange properly
+  arr.ds<- ds[do.call(order,ds[c(subjvar,diffvars,stratvars)]),
+              c(subjvar,diffvars,rtvar,stratvars)]
+  arr.ds[,c(subjvar,diffvars,stratvars)] <-
+    cols2ids(arr.ds[,c(subjvar,diffvars,stratvars),drop=F])
+  arr.ds[[".diffidx"]]<-interaction(arr.ds[c(subjvar,diffvars)],lex.order=T)
   
-  #obtain the splitting keys in a list of matrices, where each column is an iteration
-  origkeys<-applyItersplits(iters,presplit)
+  pps<-unique(arr.ds[,subjvar])
+  diffidx<-arr.ds[c(subjvar,diffvars,".diffidx")] |> unique()
+  subjlist<-split(arr.ds,arr.ds[[subjvar]])
+  difflist<-split(arr.ds,arr.ds[[".diffidx"]])
   
-  #take the upper and lower halves of each split matrix, thereby sampling two halves of the data
-  keys<-lapply(origkeys,function(x){ x[1:floor(nrow(x)/2),] } )
-  antikeys<-lapply(origkeys,function(x)x[(floor(nrow(x)/2)+1):nrow(x),])
+  # Stratify by subject
+  origkeys<-vector(mode="list",length=length(pps)) |> setNames(pps)
+  for(sj in pps){
+    iterds<-arr.ds[arr.ds[[subjvar]]==sj,c(diffvars,stratvars),drop=F]
+    iterrle<-iterds |> cols2ids() |> do.call(paste,args=_) |> rle()
+    grsizes<-iterrle$lengths
+    if(length(grsizes)==0){grsizes<-nrow(iterds)}
+    origkeys[[sj]]<-stratified_itersplits(itercount=iters, groupsizes=grsizes)
+  }
+  
+  #take two halves of the data separately
+  keys<-lapply(origkeys,function(x) x==1)
+  antikeys<-lapply(origkeys,function(x) x==0)
   
   #free memory (these matrices get huge)
   rm(origkeys)
-  
-  keymeans<-t(sapply(keys,function(x) aggfunc(matrix(ds[[rtvar]][x],ncol=iters))))
-  antikeymeans<-t(sapply(antikeys,function(x) aggfunc(matrix(ds[[rtvar]][x],ncol=iters))))
-  
-  sk<-gsub("^[0-9]*.","",names(presplit))
-  
-  keyscores<-(keymeans[sk=="0.0",] + keymeans[sk=="1.1",]) - (keymeans[sk=="0.1",] + keymeans[sk=="1.0",])
-  antikeyscores<-(antikeymeans[sk=="0.0",] + antikeymeans[sk=="1.1",]) - (antikeymeans[sk=="0.1",] + antikeymeans[sk=="1.0",])
-  
-  if(standardize){
-    sj<-gsub("\\..*$","",names(presplit))
-    
-    subjkeys<-setNames(lapply(unique(sj),function(x)do.call(rbind,keys[x==sj])),unique(sj))
-    keysds<-t(sapply(subjkeys,function(x) colSds(matrix(ds[[rtvar]][x],ncol=iters))))
-    keyscores<-keyscores/keysds
-    
-    subjantikeys<-setNames(lapply(unique(sj),function(x)do.call(rbind,antikeys[x==sj])),unique(sj))
-    antikeysds<-t(sapply(subjantikeys,function(x) colSds(matrix(ds[[rtvar]][x],ncol=iters))))
-    antikeyscores<-antikeyscores/antikeysds
-  }
-  
-  cors<-sapply(1:iters,function(x) cor(keyscores[,x],antikeyscores[,x]))
-  
-  list(r=cormean(SpearmanBrown(cors),rep(length(unique(ds[[subjvar]])),length(cors))),
-       allcors=cors)
-}
-
-
-
-
-
-
-
-
-
-
-stratRapidsplit2<-function(ds,subjvar,pullvar,targetvar,rtvar,iters,agg=c("means","medians"),standardize=F,stratvars=NULL){
-  if(agg=="means"){
-    aggfunc<-colMeans
-  }else if(agg=="medians"){
-    aggfunc<-colMedians
-  }
-  
-  #Stratify the split
-  presplit<-split(seq_len(nrow(ds)),ds[c(subjvar,pullvar,targetvar,stratvars)],drop=T)
-  
-  #obtain the splitting keys in a list of matrices, where each column is an iteration
-  origkeys<-applyItersplits(iters,presplit)
-  
-  #take the upper and lower halves of each split matrix, thereby sampling two halves of the data
-  keys<-lapply(origkeys,function(x){ x[1:floor(nrow(x)/2),] } )
-  antikeys<-lapply(origkeys,function(x)x[(floor(nrow(x)/2)+1):nrow(x),])
-  
-  #free memory (these matrices get huge)
-  rm(origkeys)
-  
-  #remerge across stratification variables, if there were any
-  if(length(stratvars>0)){
-    sk<-gsub("\\.[^.]+$","",names(presplit))
-    keys<-lapply(tapply(keys,sk,list),function(x)do.call(rbind,x))
-    antikeys<-lapply(tapply(antikeys,sk,list),function(x)do.call(rbind,x))
-  }
   
   #get aggregates per condition
-  keymeans<-t(sapply(keys,function(x) aggfunc(matrix(ds[[rtvar]][x],ncol=iters))))
-  antikeymeans<-t(sapply(antikeys,function(x) aggfunc(matrix(ds[[rtvar]][x],ncol=iters))))
+  keymeans<-antikeymeans<-matrix(ncol=iters,nrow=length(difflist))
+  for(i in seq_along(difflist)){
+    ppid<-difflist[[i]][[subjvar]][1]
+    diffid<-names(difflist)[i]
+    keymeans[i,]<-
+      aggfunc(values=difflist[[i]][[rtvar]],
+              mask=keys[[ppid]][subjlist[[ppid]][[".diffidx"]]==diffid ,])
+    antikeymeans[i,]<-
+      aggfunc(values=difflist[[i]][[rtvar]],
+              mask=antikeys[[ppid]][subjlist[[ppid]][[".diffidx"]]==diffid ,])
+  }
   
-  sk<-gsub("^[0-9]*.","",names(keys))
-  
-  keyscores<-(keymeans[sk=="0.0",] + keymeans[sk=="1.1",]) - (keymeans[sk=="0.1",] + keymeans[sk=="1.0",])
-  antikeyscores<-(antikeymeans[sk=="0.0",] + antikeymeans[sk=="1.1",]) - (antikeymeans[sk=="0.1",] + antikeymeans[sk=="1.0",])
-  
+  # Get scores
+  if(length(diffvars)>0){
+    diffidx[[".valence"]]<-diffidx[diffvars] |> clamp.range() |> Reduce(`*`,x=_)
+    keyscores<-sapply(pps,function(pp){
+      colSums(keymeans[diffidx[[subjvar]]==pp,] * diffidx[[".valence"]][diffidx[[subjvar]]==pp])
+    }) |> t()
+    antikeyscores<-sapply(pps,function(pp){
+      colSums(antikeymeans[diffidx[[subjvar]]==pp,] * diffidx[[".valence"]][diffidx[[subjvar]]==pp])
+    }) |> t()
+  }else{
+    keyscores<-keymeans
+    antikeyscores<-antikeymeans
+  }
+    
+  # Standardize if necessary
   if(standardize){
-    sj<-gsub("\\..*$","",names(presplit))
-    
-    subjkeys<-setNames(lapply(unique(sj),function(x)do.call(rbind,keys[x==sj])),unique(sj))
-    keysds<-t(sapply(subjkeys,function(x) colSds(matrix(ds[[rtvar]][x],ncol=iters))))
+    keysds<-antikeysds<-matrix(ncol=iters,nrow=length(subjlist))
+    for(i in seq_along(subjlist)){
+      keysds[i,]<-sdsByMask(values=subjlist[[i]][[rtvar]],
+                            mask=keys[[i]])
+      antikeysds[i,]<-sdsByMask(values=subjlist[[i]][[rtvar]],
+                                mask=antikeys[[i]])
+    }
     keyscores<-keyscores/keysds
-    
-    subjantikeys<-setNames(lapply(unique(sj),function(x)do.call(rbind,antikeys[x==sj])),unique(sj))
-    antikeysds<-t(sapply(subjantikeys,function(x) colSds(matrix(ds[[rtvar]][x],ncol=iters))))
     antikeyscores<-antikeyscores/antikeysds
   }
   
-  cors<-sapply(1:iters,function(x) cor(keyscores[,x],antikeyscores[,x]))
+  # Get correlations
+  cors<-corByColumns(keyscores,antikeyscores)
   
-  list(r=cormean(SpearmanBrown(cors),rep(length(unique(ds[[subjvar]])),length(cors))),
-       allcors=cors)
-}
-
-
-stratRapidsplit<-function(ds,subjvar,pullvar,targetvar,rtvar,iters,standardize=F,stratvars=NULL){
-  
-  #Stratify the split
-  presplit<-split(seq_len(nrow(ds)),ds[c(subjvar,stratvars)],drop=T)
-  
-  #obtain the splitting keys in a list of matrices, where each column is an iteration
-  origkeys<-applyItersplits(iters,presplit)
-  
-  #take the upper and lower halves of each split matrix, thereby sampling two halves of the data
-  keys<-lapply(origkeys,function(x){ x[1:floor(nrow(x)/2),] } )
-  antikeys<-lapply(origkeys,function(x)x[(floor(nrow(x)/2)+1):nrow(x),])
-  
-  #free memory (these matrices get huge)
-  rm(origkeys)
-  
-  #remerge across stratifications
-  if(length(stratvars>0)){
-    sk<-gsub("\\..*$","",names(presplit))
-    keys<-lapply(tapply(keys,sk,list),function(x)do.call(rbind,x))
-    antikeys<-lapply(tapply(antikeys,sk,list),function(x)do.call(rbind,x))
-  }
-  
-  
-  keypulltar<-t(sapply(keys,function(x){ 
-    colMeans_mask(mat = matrix(ds[[rtvar]][x],ncol=iters),
-                  mask= matrix(ds[[pullvar]][x],ncol=iters)==1 & 
-                    matrix(ds[[targetvar]][x],ncol=iters)==1) 
-  }))
-  keypushtar<-t(sapply(keys,function(x){ 
-    colMeans_mask(mat = matrix(ds[[rtvar]][x],ncol=iters),
-                  mask= matrix(ds[[pullvar]][x],ncol=iters)==0 & 
-                    matrix(ds[[targetvar]][x],ncol=iters)==1) 
-  }))
-  keypullcon<-t(sapply(keys,function(x){ 
-    colMeans_mask(mat = matrix(ds[[rtvar]][x],ncol=iters),
-                  mask= matrix(ds[[pullvar]][x],ncol=iters)==1 & 
-                    matrix(ds[[targetvar]][x],ncol=iters)==0) 
-  }))
-  keypushcon<-t(sapply(keys,function(x){ 
-    colMeans_mask(mat = matrix(ds[[rtvar]][x],ncol=iters),
-                  mask= matrix(ds[[pullvar]][x],ncol=iters)==0 & 
-                    matrix(ds[[targetvar]][x],ncol=iters)==0) 
-  }))
-  keyscores<-((keypushtar-keypulltar)-(keypushcon-keypullcon))
-  
-  
-  antikeypulltar<-t(sapply(antikeys,function(x){ 
-    colMeans_mask(mat = matrix(ds[[rtvar]][x],ncol=iters),
-                  mask= matrix(ds[[pullvar]][x],ncol=iters)==1 & 
-                    matrix(ds[[targetvar]][x],ncol=iters)==1) 
-  }))
-  antikeypushtar<-t(sapply(antikeys,function(x){ 
-    colMeans_mask(mat = matrix(ds[[rtvar]][x],ncol=iters),
-                  mask= matrix(ds[[pullvar]][x],ncol=iters)==0 & 
-                    matrix(ds[[targetvar]][x],ncol=iters)==1) 
-  }))
-  antikeypullcon<-t(sapply(antikeys,function(x){ 
-    colMeans_mask(mat = matrix(ds[[rtvar]][x],ncol=iters),
-                  mask= matrix(ds[[pullvar]][x],ncol=iters)==1 & 
-                    matrix(ds[[targetvar]][x],ncol=iters)==0) 
-  }))
-  antikeypushcon<-t(sapply(antikeys,function(x){ 
-    colMeans_mask(mat = matrix(ds[[rtvar]][x],ncol=iters),
-                  mask= matrix(ds[[pullvar]][x],ncol=iters)==0 & 
-                    matrix(ds[[targetvar]][x],ncol=iters)==0) 
-  }))
-  antikeyscores<-((antikeypushtar-antikeypulltar)-(antikeypushcon-antikeypullcon))
-  
-  # divide by SD if necessary
-  if(standardize){
-    keysds<-t(sapply(keys,function(x) colSds(matrix(ds[[rtvar]][x],ncol=iters))))
-    keyscores<-keyscores/keysds
-    
-    antikeysds<-t(sapply(antikeys,function(x) colSds(matrix(ds[[rtvar]][x],ncol=iters))))
-    antikeyscores<-antikeyscores/antikeysds
-  }
-  
-  cors<-sapply(1:iters,function(x) cor(keyscores[,x],antikeyscores[,x]))
-  
-  list(r=cormean(SpearmanBrown(cors),rep(length(unique(ds[[subjvar]])),length(cors))),
-       allcors=cors)
+  # Form and return output
+  out<-list(r=cormean(SpearmanBrown(cors),rep(length(unique(ds[[subjvar]])),length(cors))),
+            allcors=cors)
+  return(out)
 }
 

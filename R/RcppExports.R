@@ -89,6 +89,7 @@ ExcludeSDOutliers_nomask <- function(mat, sdlim = 3) {
 #'
 #' @param iters number of iterations
 #' @param splits list of vectors of row numbers
+#' @param replace Sample without (default) or with replacement
 #' @export
 applyItersplits <- function(iters, splits, replace = FALSE) {
     .Call('_rapidsplit_applyItersplits', PACKAGE = 'rapidsplit', iters, splits, replace)
@@ -113,7 +114,7 @@ stratified_itersplits <- function(itercount, groupsizes) {
 #' 
 #' Correlate each column of 1 matrix with the same column in another matrix
 #'
-#' @param mat1,mat2 Matrices to correlate
+#' @param mat1,mat2 Matrices whose values to correlate by column
 #' @returns A numeric vector of correlations per column
 #' @export
 corByColumns <- function(mat1, mat2) {

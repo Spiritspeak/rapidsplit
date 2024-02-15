@@ -10,6 +10,8 @@ applyItersplits(iters, splits, replace = FALSE)
 \item{iters}{number of iterations}
 
 \item{splits}{list of vectors of row numbers}
+
+\item{replace}{Sample without (default) or with replacement}
 }
 \description{
 generate splits for splithalf
