@@ -77,10 +77,10 @@ rapidsplit<-function(ds,subjvar,diffvars=NULL,stratvars=NULL,rtvar,iters,
     diffid<-names(difflist)[i]
     keymeans[i,]<-
       aggfunc(values=difflist[[i]][[rtvar]],
-              mask=keys[[ppid]][subjlist[[ppid]][[".diffidx"]]==diffid ,])
+              mask=keys[[ppid]][subjlist[[ppid]][[".diffidx"]]==diffid ,,drop=F])
     antikeymeans[i,]<-
       aggfunc(values=difflist[[i]][[rtvar]],
-              mask=antikeys[[ppid]][subjlist[[ppid]][[".diffidx"]]==diffid ,])
+              mask=antikeys[[ppid]][subjlist[[ppid]][[".diffidx"]]==diffid ,,drop=F])
   }
   
   # Get scores
