@@ -345,3 +345,27 @@ NumericVector corByColumns_mask(NumericMatrix mat1, NumericMatrix mat2, LogicalM
   return out;
 }
 
+//' Exclude outliers by mask
+//' 
+//' Exclude outliers by mask
+//'
+//' @param values values to detect outliers from
+//' @param mask a logical matrix determining which data points to include per iteration (column)
+//' @params maxsd values exceeding more than this value in SDs will be excluded from the mask
+//' @returns An updated logical mask matrix with all outliers excluded
+//' @export
+// [[Rcpp::export]]
+LogicalMatrix maskOLExclusion(NumericVector values, LogicalMatrix mask, double maxsd){
+  int tl = mask.ncol();
+  LogicalMatrix newmask (mask.nrow(),mask.ncol());
+  
+  for(int i=0; i<tl; i++){
+    LogicalVector currmask = mask.column(i);
+    NumericVector maskedcol = values[currmask];
+    double colmean = mean(maskedcol);
+    double colsd = sd(maskedcol);
+    LogicalVector isMasked = ((values-colmean)/colsd < maxsd) & currmask;
+    newmask(_,i) = isMasked;
+  }
+  return newmask;
+}

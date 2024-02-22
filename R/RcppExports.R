@@ -128,3 +128,16 @@ corByColumns_mask <- function(mat1, mat2, mask) {
     .Call('_rapidsplit_corByColumns_mask', PACKAGE = 'rapidsplit', mat1, mat2, mask)
 }
 
+#' Exclude outliers by mask
+#' 
+#' Exclude outliers by mask
+#'
+#' @param values values to detect outliers from
+#' @param mask a logical matrix determining which data points to include per iteration (column)
+#' @params maxsd values exceeding more than this value in SDs will be excluded from the mask
+#' @returns An updated logical mask matrix with all outliers excluded
+#' @export
+maskOLExclusion <- function(values, mask, maxsd) {
+    .Call('_rapidsplit_maskOLExclusion', PACKAGE = 'rapidsplit', values, mask, maxsd)
+}
+

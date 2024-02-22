@@ -179,6 +179,19 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// maskOLExclusion
+LogicalMatrix maskOLExclusion(NumericVector values, LogicalMatrix mask, double maxsd);
+RcppExport SEXP _rapidsplit_maskOLExclusion(SEXP valuesSEXP, SEXP maskSEXP, SEXP maxsdSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type values(valuesSEXP);
+    Rcpp::traits::input_parameter< LogicalMatrix >::type mask(maskSEXP);
+    Rcpp::traits::input_parameter< double >::type maxsd(maxsdSEXP);
+    rcpp_result_gen = Rcpp::wrap(maskOLExclusion(values, mask, maxsd));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_rapidsplit_colMedians", (DL_FUNC) &_rapidsplit_colMedians, 1},
@@ -195,6 +208,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_rapidsplit_stratified_itersplits", (DL_FUNC) &_rapidsplit_stratified_itersplits, 2},
     {"_rapidsplit_corByColumns", (DL_FUNC) &_rapidsplit_corByColumns, 2},
     {"_rapidsplit_corByColumns_mask", (DL_FUNC) &_rapidsplit_corByColumns_mask, 3},
+    {"_rapidsplit_maskOLExclusion", (DL_FUNC) &_rapidsplit_maskOLExclusion, 3},
     {NULL, NULL, 0}
 };
 
