@@ -364,7 +364,7 @@ LogicalMatrix maskOLExclusion(NumericVector values, LogicalMatrix mask, double m
     NumericVector maskedcol = values[currmask];
     double colmean = mean(maskedcol);
     double colsd = sd(maskedcol);
-    LogicalVector isMasked = ((values-colmean)/colsd < maxsd) & currmask;
+    LogicalVector isMasked = (abs((values-colmean))/colsd < maxsd) & currmask;
     newmask(_,i) = isMasked;
   }
   return newmask;
