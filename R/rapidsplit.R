@@ -111,10 +111,10 @@ rapidsplit<-function(ds,subjvar,diffvars=NULL,stratvars=NULL,rtvar,iters,
   }
   
   # Get correlations
-  cors<-corByColumns(keyscores,antikeyscores)
+  cors<-corByColumns(keyscores,antikeyscores) |> SpearmanBrown()
   
   # Form and return output
-  out<-list(r=cormean(SpearmanBrown(cors),rep(length(unique(ds[[subjvar]])),length(cors))),
+  out<-list(r=cormean(cors,rep(length(unique(ds[[subjvar]])),length(cors))),
             allcors=cors)
   return(out)
 }

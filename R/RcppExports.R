@@ -134,7 +134,7 @@ corByColumns_mask <- function(mat1, mat2, mask) {
 #'
 #' @param values values to detect outliers from
 #' @param mask a logical matrix determining which data points to include per iteration (column)
-#' @params maxsd values exceeding more than this value in SDs will be excluded from the mask
+#' @param maxsd values exceeding more than this value in SDs will be excluded from the mask
 #' @returns An updated logical mask matrix with all outliers excluded
 #' @export
 maskOLExclusion <- function(values, mask, maxsd) {

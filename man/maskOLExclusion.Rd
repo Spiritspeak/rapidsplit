@@ -10,6 +10,8 @@ maskOLExclusion(values, mask, maxsd)
 \item{values}{values to detect outliers from}
 
 \item{mask}{a logical matrix determining which data points to include per iteration (column)}
+
+\item{maxsd}{values exceeding more than this value in SDs will be excluded from the mask}
 }
 \value{
 An updated logical mask matrix with all outliers excluded
