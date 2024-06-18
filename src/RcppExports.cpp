@@ -10,205 +10,255 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
-// colMedians
-NumericVector colMedians(NumericMatrix mat);
-RcppExport SEXP _rapidsplit_colMedians(SEXP matSEXP) {
+// stratifiedItersplits
+LogicalMatrix stratifiedItersplits(int splits, IntegerVector groupsizes);
+RcppExport SEXP _rapidsplit_stratifiedItersplits(SEXP splitsSEXP, SEXP groupsizesSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericMatrix >::type mat(matSEXP);
-    rcpp_result_gen = Rcpp::wrap(colMedians(mat));
-    return rcpp_result_gen;
-END_RCPP
-}
-// colMedians_mask
-NumericVector colMedians_mask(NumericMatrix mat, LogicalMatrix mask);
-RcppExport SEXP _rapidsplit_colMedians_mask(SEXP matSEXP, SEXP maskSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericMatrix >::type mat(matSEXP);
-    Rcpp::traits::input_parameter< LogicalMatrix >::type mask(maskSEXP);
-    rcpp_result_gen = Rcpp::wrap(colMedians_mask(mat, mask));
-    return rcpp_result_gen;
-END_RCPP
-}
-// mediansByMask
-NumericVector mediansByMask(NumericVector values, LogicalMatrix mask);
-RcppExport SEXP _rapidsplit_mediansByMask(SEXP valuesSEXP, SEXP maskSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type values(valuesSEXP);
-    Rcpp::traits::input_parameter< LogicalMatrix >::type mask(maskSEXP);
-    rcpp_result_gen = Rcpp::wrap(mediansByMask(values, mask));
-    return rcpp_result_gen;
-END_RCPP
-}
-// colMeans_mask
-NumericVector colMeans_mask(NumericMatrix mat, LogicalMatrix mask);
-RcppExport SEXP _rapidsplit_colMeans_mask(SEXP matSEXP, SEXP maskSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericMatrix >::type mat(matSEXP);
-    Rcpp::traits::input_parameter< LogicalMatrix >::type mask(maskSEXP);
-    rcpp_result_gen = Rcpp::wrap(colMeans_mask(mat, mask));
-    return rcpp_result_gen;
-END_RCPP
-}
-// meansByMask
-NumericVector meansByMask(NumericVector values, LogicalMatrix mask);
-RcppExport SEXP _rapidsplit_meansByMask(SEXP valuesSEXP, SEXP maskSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type values(valuesSEXP);
-    Rcpp::traits::input_parameter< LogicalMatrix >::type mask(maskSEXP);
-    rcpp_result_gen = Rcpp::wrap(meansByMask(values, mask));
-    return rcpp_result_gen;
-END_RCPP
-}
-// colSds
-NumericVector colSds(NumericMatrix mat);
-RcppExport SEXP _rapidsplit_colSds(SEXP matSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericMatrix >::type mat(matSEXP);
-    rcpp_result_gen = Rcpp::wrap(colSds(mat));
-    return rcpp_result_gen;
-END_RCPP
-}
-// colSds_mask
-NumericVector colSds_mask(NumericMatrix mat, LogicalMatrix mask);
-RcppExport SEXP _rapidsplit_colSds_mask(SEXP matSEXP, SEXP maskSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericMatrix >::type mat(matSEXP);
-    Rcpp::traits::input_parameter< LogicalMatrix >::type mask(maskSEXP);
-    rcpp_result_gen = Rcpp::wrap(colSds_mask(mat, mask));
-    return rcpp_result_gen;
-END_RCPP
-}
-// sdsByMask
-NumericVector sdsByMask(NumericVector values, LogicalMatrix mask);
-RcppExport SEXP _rapidsplit_sdsByMask(SEXP valuesSEXP, SEXP maskSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type values(valuesSEXP);
-    Rcpp::traits::input_parameter< LogicalMatrix >::type mask(maskSEXP);
-    rcpp_result_gen = Rcpp::wrap(sdsByMask(values, mask));
-    return rcpp_result_gen;
-END_RCPP
-}
-// ExcludeSDOutliers
-LogicalMatrix ExcludeSDOutliers(NumericVector rtvec, LogicalMatrix mask, double sdlim);
-RcppExport SEXP _rapidsplit_ExcludeSDOutliers(SEXP rtvecSEXP, SEXP maskSEXP, SEXP sdlimSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type rtvec(rtvecSEXP);
-    Rcpp::traits::input_parameter< LogicalMatrix >::type mask(maskSEXP);
-    Rcpp::traits::input_parameter< double >::type sdlim(sdlimSEXP);
-    rcpp_result_gen = Rcpp::wrap(ExcludeSDOutliers(rtvec, mask, sdlim));
-    return rcpp_result_gen;
-END_RCPP
-}
-// ExcludeSDOutliers_nomask
-LogicalMatrix ExcludeSDOutliers_nomask(NumericMatrix mat, double sdlim);
-RcppExport SEXP _rapidsplit_ExcludeSDOutliers_nomask(SEXP matSEXP, SEXP sdlimSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericMatrix >::type mat(matSEXP);
-    Rcpp::traits::input_parameter< double >::type sdlim(sdlimSEXP);
-    rcpp_result_gen = Rcpp::wrap(ExcludeSDOutliers_nomask(mat, sdlim));
-    return rcpp_result_gen;
-END_RCPP
-}
-// applyItersplits
-List applyItersplits(int iters, List splits, bool replace);
-RcppExport SEXP _rapidsplit_applyItersplits(SEXP itersSEXP, SEXP splitsSEXP, SEXP replaceSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< int >::type iters(itersSEXP);
-    Rcpp::traits::input_parameter< List >::type splits(splitsSEXP);
-    Rcpp::traits::input_parameter< bool >::type replace(replaceSEXP);
-    rcpp_result_gen = Rcpp::wrap(applyItersplits(iters, splits, replace));
-    return rcpp_result_gen;
-END_RCPP
-}
-// stratified_itersplits
-IntegerMatrix stratified_itersplits(int itercount, IntegerVector groupsizes);
-RcppExport SEXP _rapidsplit_stratified_itersplits(SEXP itercountSEXP, SEXP groupsizesSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< int >::type itercount(itercountSEXP);
+    Rcpp::traits::input_parameter< int >::type splits(splitsSEXP);
     Rcpp::traits::input_parameter< IntegerVector >::type groupsizes(groupsizesSEXP);
-    rcpp_result_gen = Rcpp::wrap(stratified_itersplits(itercount, groupsizes));
+    rcpp_result_gen = Rcpp::wrap(stratifiedItersplits(splits, groupsizes));
+    return rcpp_result_gen;
+END_RCPP
+}
+// bootstrapWeights
+IntegerMatrix bootstrapWeights(int size, int times);
+RcppExport SEXP _rapidsplit_bootstrapWeights(SEXP sizeSEXP, SEXP timesSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type size(sizeSEXP);
+    Rcpp::traits::input_parameter< int >::type times(timesSEXP);
+    rcpp_result_gen = Rcpp::wrap(bootstrapWeights(size, times));
     return rcpp_result_gen;
 END_RCPP
 }
 // corByColumns
-NumericVector corByColumns(NumericMatrix mat1, NumericMatrix mat2);
-RcppExport SEXP _rapidsplit_corByColumns(SEXP mat1SEXP, SEXP mat2SEXP) {
+NumericVector corByColumns(NumericMatrix x, NumericMatrix y);
+RcppExport SEXP _rapidsplit_corByColumns(SEXP xSEXP, SEXP ySEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericMatrix >::type mat1(mat1SEXP);
-    Rcpp::traits::input_parameter< NumericMatrix >::type mat2(mat2SEXP);
-    rcpp_result_gen = Rcpp::wrap(corByColumns(mat1, mat2));
+    Rcpp::traits::input_parameter< NumericMatrix >::type x(xSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type y(ySEXP);
+    rcpp_result_gen = Rcpp::wrap(corByColumns(x, y));
     return rcpp_result_gen;
 END_RCPP
 }
 // corByColumns_mask
-NumericVector corByColumns_mask(NumericMatrix mat1, NumericMatrix mat2, LogicalMatrix mask);
-RcppExport SEXP _rapidsplit_corByColumns_mask(SEXP mat1SEXP, SEXP mat2SEXP, SEXP maskSEXP) {
+NumericVector corByColumns_mask(NumericMatrix x, NumericMatrix y, LogicalMatrix mask);
+RcppExport SEXP _rapidsplit_corByColumns_mask(SEXP xSEXP, SEXP ySEXP, SEXP maskSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericMatrix >::type mat1(mat1SEXP);
-    Rcpp::traits::input_parameter< NumericMatrix >::type mat2(mat2SEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type x(xSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type y(ySEXP);
     Rcpp::traits::input_parameter< LogicalMatrix >::type mask(maskSEXP);
-    rcpp_result_gen = Rcpp::wrap(corByColumns_mask(mat1, mat2, mask));
+    rcpp_result_gen = Rcpp::wrap(corByColumns_mask(x, y, mask));
     return rcpp_result_gen;
 END_RCPP
 }
-// maskOLExclusion
-LogicalMatrix maskOLExclusion(NumericVector values, LogicalMatrix mask, double maxsd);
-RcppExport SEXP _rapidsplit_maskOLExclusion(SEXP valuesSEXP, SEXP maskSEXP, SEXP maxsdSEXP) {
+// colMedians
+NumericVector colMedians(NumericMatrix x);
+RcppExport SEXP _rapidsplit_colMedians(SEXP xSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type values(valuesSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(colMedians(x));
+    return rcpp_result_gen;
+END_RCPP
+}
+// colProds
+NumericVector colProds(NumericMatrix x);
+RcppExport SEXP _rapidsplit_colProds(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(colProds(x));
+    return rcpp_result_gen;
+END_RCPP
+}
+// colSds
+NumericVector colSds(NumericMatrix x);
+RcppExport SEXP _rapidsplit_colSds(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(colSds(x));
+    return rcpp_result_gen;
+END_RCPP
+}
+// colMediansMasked
+NumericVector colMediansMasked(NumericMatrix x, LogicalMatrix mask);
+RcppExport SEXP _rapidsplit_colMediansMasked(SEXP xSEXP, SEXP maskSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type x(xSEXP);
     Rcpp::traits::input_parameter< LogicalMatrix >::type mask(maskSEXP);
-    Rcpp::traits::input_parameter< double >::type maxsd(maxsdSEXP);
-    rcpp_result_gen = Rcpp::wrap(maskOLExclusion(values, mask, maxsd));
+    rcpp_result_gen = Rcpp::wrap(colMediansMasked(x, mask));
+    return rcpp_result_gen;
+END_RCPP
+}
+// colMeansMasked
+NumericVector colMeansMasked(NumericMatrix x, LogicalMatrix mask);
+RcppExport SEXP _rapidsplit_colMeansMasked(SEXP xSEXP, SEXP maskSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type x(xSEXP);
+    Rcpp::traits::input_parameter< LogicalMatrix >::type mask(maskSEXP);
+    rcpp_result_gen = Rcpp::wrap(colMeansMasked(x, mask));
+    return rcpp_result_gen;
+END_RCPP
+}
+// colSdsMasked
+NumericVector colSdsMasked(NumericMatrix x, LogicalMatrix mask);
+RcppExport SEXP _rapidsplit_colSdsMasked(SEXP xSEXP, SEXP maskSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type x(xSEXP);
+    Rcpp::traits::input_parameter< LogicalMatrix >::type mask(maskSEXP);
+    rcpp_result_gen = Rcpp::wrap(colSdsMasked(x, mask));
+    return rcpp_result_gen;
+END_RCPP
+}
+// mediansByMask
+NumericVector mediansByMask(NumericVector x, LogicalMatrix mask);
+RcppExport SEXP _rapidsplit_mediansByMask(SEXP xSEXP, SEXP maskSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< LogicalMatrix >::type mask(maskSEXP);
+    rcpp_result_gen = Rcpp::wrap(mediansByMask(x, mask));
+    return rcpp_result_gen;
+END_RCPP
+}
+// meansByMask
+NumericVector meansByMask(NumericVector x, LogicalMatrix mask);
+RcppExport SEXP _rapidsplit_meansByMask(SEXP xSEXP, SEXP maskSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< LogicalMatrix >::type mask(maskSEXP);
+    rcpp_result_gen = Rcpp::wrap(meansByMask(x, mask));
+    return rcpp_result_gen;
+END_RCPP
+}
+// sdsByMask
+NumericVector sdsByMask(NumericVector x, LogicalMatrix mask);
+RcppExport SEXP _rapidsplit_sdsByMask(SEXP xSEXP, SEXP maskSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< LogicalMatrix >::type mask(maskSEXP);
+    rcpp_result_gen = Rcpp::wrap(sdsByMask(x, mask));
+    return rcpp_result_gen;
+END_RCPP
+}
+// mediansByWeight
+NumericVector mediansByWeight(NumericVector x, IntegerMatrix weights);
+RcppExport SEXP _rapidsplit_mediansByWeight(SEXP xSEXP, SEXP weightsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< IntegerMatrix >::type weights(weightsSEXP);
+    rcpp_result_gen = Rcpp::wrap(mediansByWeight(x, weights));
+    return rcpp_result_gen;
+END_RCPP
+}
+// meansByWeight
+NumericVector meansByWeight(NumericVector x, IntegerMatrix weights);
+RcppExport SEXP _rapidsplit_meansByWeight(SEXP xSEXP, SEXP weightsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< IntegerMatrix >::type weights(weightsSEXP);
+    rcpp_result_gen = Rcpp::wrap(meansByWeight(x, weights));
+    return rcpp_result_gen;
+END_RCPP
+}
+// sdsByWeight
+NumericVector sdsByWeight(NumericVector x, NumericMatrix weights);
+RcppExport SEXP _rapidsplit_sdsByWeight(SEXP xSEXP, SEXP weightsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type weights(weightsSEXP);
+    rcpp_result_gen = Rcpp::wrap(sdsByWeight(x, weights));
+    return rcpp_result_gen;
+END_RCPP
+}
+// excludeOutliersByMask
+LogicalMatrix excludeOutliersByMask(NumericVector x, LogicalMatrix mask, double sdlim);
+RcppExport SEXP _rapidsplit_excludeOutliersByMask(SEXP xSEXP, SEXP maskSEXP, SEXP sdlimSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< LogicalMatrix >::type mask(maskSEXP);
+    Rcpp::traits::input_parameter< double >::type sdlim(sdlimSEXP);
+    rcpp_result_gen = Rcpp::wrap(excludeOutliersByMask(x, mask, sdlim));
+    return rcpp_result_gen;
+END_RCPP
+}
+// maskOutliers
+LogicalMatrix maskOutliers(NumericMatrix x, double sdlim);
+RcppExport SEXP _rapidsplit_maskOutliers(SEXP xSEXP, SEXP sdlimSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type x(xSEXP);
+    Rcpp::traits::input_parameter< double >::type sdlim(sdlimSEXP);
+    rcpp_result_gen = Rcpp::wrap(maskOutliers(x, sdlim));
+    return rcpp_result_gen;
+END_RCPP
+}
+// maskOutliersMasked
+LogicalMatrix maskOutliersMasked(NumericMatrix x, LogicalMatrix mask, double sdlim);
+RcppExport SEXP _rapidsplit_maskOutliersMasked(SEXP xSEXP, SEXP maskSEXP, SEXP sdlimSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type x(xSEXP);
+    Rcpp::traits::input_parameter< LogicalMatrix >::type mask(maskSEXP);
+    Rcpp::traits::input_parameter< double >::type sdlim(sdlimSEXP);
+    rcpp_result_gen = Rcpp::wrap(maskOutliersMasked(x, mask, sdlim));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_rapidsplit_colMedians", (DL_FUNC) &_rapidsplit_colMedians, 1},
-    {"_rapidsplit_colMedians_mask", (DL_FUNC) &_rapidsplit_colMedians_mask, 2},
-    {"_rapidsplit_mediansByMask", (DL_FUNC) &_rapidsplit_mediansByMask, 2},
-    {"_rapidsplit_colMeans_mask", (DL_FUNC) &_rapidsplit_colMeans_mask, 2},
-    {"_rapidsplit_meansByMask", (DL_FUNC) &_rapidsplit_meansByMask, 2},
-    {"_rapidsplit_colSds", (DL_FUNC) &_rapidsplit_colSds, 1},
-    {"_rapidsplit_colSds_mask", (DL_FUNC) &_rapidsplit_colSds_mask, 2},
-    {"_rapidsplit_sdsByMask", (DL_FUNC) &_rapidsplit_sdsByMask, 2},
-    {"_rapidsplit_ExcludeSDOutliers", (DL_FUNC) &_rapidsplit_ExcludeSDOutliers, 3},
-    {"_rapidsplit_ExcludeSDOutliers_nomask", (DL_FUNC) &_rapidsplit_ExcludeSDOutliers_nomask, 2},
-    {"_rapidsplit_applyItersplits", (DL_FUNC) &_rapidsplit_applyItersplits, 3},
-    {"_rapidsplit_stratified_itersplits", (DL_FUNC) &_rapidsplit_stratified_itersplits, 2},
+    {"_rapidsplit_stratifiedItersplits", (DL_FUNC) &_rapidsplit_stratifiedItersplits, 2},
+    {"_rapidsplit_bootstrapWeights", (DL_FUNC) &_rapidsplit_bootstrapWeights, 2},
     {"_rapidsplit_corByColumns", (DL_FUNC) &_rapidsplit_corByColumns, 2},
     {"_rapidsplit_corByColumns_mask", (DL_FUNC) &_rapidsplit_corByColumns_mask, 3},
-    {"_rapidsplit_maskOLExclusion", (DL_FUNC) &_rapidsplit_maskOLExclusion, 3},
+    {"_rapidsplit_colMedians", (DL_FUNC) &_rapidsplit_colMedians, 1},
+    {"_rapidsplit_colProds", (DL_FUNC) &_rapidsplit_colProds, 1},
+    {"_rapidsplit_colSds", (DL_FUNC) &_rapidsplit_colSds, 1},
+    {"_rapidsplit_colMediansMasked", (DL_FUNC) &_rapidsplit_colMediansMasked, 2},
+    {"_rapidsplit_colMeansMasked", (DL_FUNC) &_rapidsplit_colMeansMasked, 2},
+    {"_rapidsplit_colSdsMasked", (DL_FUNC) &_rapidsplit_colSdsMasked, 2},
+    {"_rapidsplit_mediansByMask", (DL_FUNC) &_rapidsplit_mediansByMask, 2},
+    {"_rapidsplit_meansByMask", (DL_FUNC) &_rapidsplit_meansByMask, 2},
+    {"_rapidsplit_sdsByMask", (DL_FUNC) &_rapidsplit_sdsByMask, 2},
+    {"_rapidsplit_mediansByWeight", (DL_FUNC) &_rapidsplit_mediansByWeight, 2},
+    {"_rapidsplit_meansByWeight", (DL_FUNC) &_rapidsplit_meansByWeight, 2},
+    {"_rapidsplit_sdsByWeight", (DL_FUNC) &_rapidsplit_sdsByWeight, 2},
+    {"_rapidsplit_excludeOutliersByMask", (DL_FUNC) &_rapidsplit_excludeOutliersByMask, 3},
+    {"_rapidsplit_maskOutliers", (DL_FUNC) &_rapidsplit_maskOutliers, 2},
+    {"_rapidsplit_maskOutliersMasked", (DL_FUNC) &_rapidsplit_maskOutliersMasked, 3},
     {NULL, NULL, 0}
 };
 

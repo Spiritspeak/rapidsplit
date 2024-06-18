@@ -1,4 +1,5 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^generate_manual\.R$
-^rapidsplit_0\.0\.0\.1\.pdf$
+^rapidsplit_.*.pdf$
+

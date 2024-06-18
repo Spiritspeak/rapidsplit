@@ -2,46 +2,130 @@
 % Please edit documentation in R/rapidsplit.R, R/zzz.R
 \name{rapidsplit}
 \alias{rapidsplit}
+\alias{print.rapidsplit}
+\alias{plot.rapidsplit}
 \alias{rapidsplit-package}
 \title{rapidsplit}
 \usage{
 rapidsplit(
-  ds,
+  data,
   subjvar,
   diffvars = NULL,
   stratvars = NULL,
-  rtvar,
-  iters,
-  agg = c("means", "medians"),
-  standardize = F
+  subscorevar = NULL,
+  aggvar,
+  splits,
+  aggfunc = c("means", "medians", "custom"),
+  custom.aggfunc = NULL,
+  standardize = FALSE,
+  include.scores = TRUE,
+  verbose = TRUE,
+  check = TRUE
+)
+
+\method{print}{rapidsplit}(x, ...)
+
+\method{plot}{rapidsplit}(
+  x,
+  type = c("average", "minimum", "maximum", "random", "all"),
+  show.labels = TRUE,
+  ...
 )
 }
 \arguments{
-\item{ds}{Dataset, a \code{data.frame}}
+\item{data}{Dataset, a \code{data.frame}.}
 
-\item{subjvar}{Subject ID variable name, a \code{character}}
+\item{subjvar}{Subject ID variable name, a \code{character}.}
 
-\item{diffvars}{Variables that determine which conditions 
-need to be subtracted from each other, a \code{character}}
+\item{diffvars}{Names of variables that determine which conditions 
+need to be subtracted from each other, \code{character}.}
 
 \item{stratvars}{Additional variables that the splits should 
-be stratified by, if possible; a \code{character}}
+be stratified by; a \code{character}.}
 
-\item{rtvar}{Reaction time variable name, a \code{character}}
+\item{subscorevar}{Variable identifying subgroups within a participant's data 
+from which separate scores should be computed. To compute a participant's final score,
+these subscores will be averaged together. A \code{character}.}
 
-\item{iters}{Number of split-halves to average, an \code{integer}}
+\item{aggvar}{Name of variable whose values to aggregate, a \code{character}.
+Examples include reaction times and error rates.}
 
-\item{agg}{The function by which to aggregate the RTs; can be \code{"means"} or \code{"medians"}}
+\item{splits}{Number of split-halves to average, an \code{integer}.}
 
-\item{standardize}{Whether to divide by scores by the subject's SD; a \code{logical}}
+\item{aggfunc}{The function by which to aggregate the variable 
+defined in \code{aggvar}; can be \code{"means"}, \code{"medians"}, 
+or a \code{"custom"} function, given with \code{"custom.aggfunc"}.}
+
+\item{custom.aggfunc}{A function that takes a numeric vector and outputs a single value,
+to be used to aggregate a participant's values per condition. 
+Only if \code{aggfunc} is set to \code{"custom"}.}
+
+\item{standardize}{Whether to divide by scores by the subject's SD; a \code{logical}.}
+
+\item{include.scores}{Include all individual split-half scores?}
+
+\item{verbose}{Display progress bars?}
+
+\item{check}{Check input for possible problems?}
+
+\item{x}{\code{rapidsplit} object to print or plot.}
+
+\item{...}{Ignored.}
+
+\item{type}{Character argument indicating what should be plotted. 
+By default, this plots the random split whose correlation is closest to the average.
+However, this can also plot the random split with 
+the \code{"minimum"} or \code{"maximum"} split-half correlation, or any \code{"random"} split. 
+\code{"all"} splits can also be plotted together in one figure.}
+
+\item{show.labels}{Should participant IDs be shown above their points in the scatterplot?
+Defaults to \code{TRUE} and is ignored when \code{type} is \code{"all"}.}
 }
 \value{
-A \code{list} containing the averaged reliability as well as 
-a vector with the reliability of each iteration
+A \code{list} containing 
+
+* \code{r}: the averaged reliability.
+
+* \code{allcors}: a vector with the reliability of each iteration.
+
+* \code{nobs}: the number of participants.
+
+* \code{scores}: the individual participants scores in each split-half, 
+contained in a list with two matrices (Only included if requested with \code{include.scores}).
 }
 \description{
-A very fast algorithm for permutated split-half reliability
+A very fast algorithm for computing stratified permutated split-half reliability.
 }
 \examples{
-print("no example")
+
+data(foodAAT)
+# Reliability of the double difference score:
+# [RT(push food)-RT(pull food)] - [RT(push object)-RT(pull object)]
+
+frel<-rapidsplit(data=foodAAT,
+                 subjvar="subjectid",
+                 diffvars=c("is_pull","is_target"),
+                 stratvars="stimid",
+                 aggvar="RT",
+                 splits=1000,
+                 aggfunc="mean")
+                 
+print(frel)
+
+plot(frel,type="all")
+
+# Unstratified reliability of the median RT
+rapidsplit(data=foodAAT,
+           subjvar="subjectid",
+           aggvar="RT",
+           splits=1000,
+           aggfunc="median")
+           
+# Compute a single random split-half reliability of the error rate
+rapidsplit(data=foodAAT,
+           subjvar="subjectid",
+           aggvar="error",
+           splits=1,
+           aggfunc="mean")
+                 
 }

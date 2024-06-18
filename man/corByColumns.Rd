@@ -3,20 +3,33 @@
 \name{corByColumns}
 \alias{corByColumns}
 \alias{corByColumns_mask}
-\title{Correlate each column of 1 matrix with the same column in another matrix}
+\title{Correlate two matrices by column}
 \usage{
-corByColumns(mat1, mat2)
+corByColumns(x, y)
 
-corByColumns_mask(mat1, mat2, mask)
+corByColumns_mask(x, y, mask)
 }
 \arguments{
-\item{mat1, mat2}{Matrices whose values to correlate by column}
+\item{x, y}{Matrices whose values to correlate by column.}
 
-\item{mask}{Logical matrix marking which data points to include}
+\item{mask}{Logical matrix marking which data points to include.}
 }
 \value{
-A numeric vector of correlations per column
+A numeric vector of correlations per column.
 }
 \description{
 Correlate each column of 1 matrix with the same column in another matrix
+}
+\details{
+The primary use for these functions is to rapidly compute the correlations
+between two sets of split-half scores stored in matrix columns.
+}
+\examples{
+m1<-matrix((1:9)+rnorm(9),ncol=3)
+m2<-matrix((9:1)+rnorm(9),ncol=3)
+corByColumns(m1,m2)
+
+mask<-1-diag(3)
+corByColumns_mask(m1,m2,mask)
+
 }
