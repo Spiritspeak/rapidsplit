@@ -15,9 +15,9 @@
 #' @export
 #'
 #' @examples
-#' SpearmanBrown(.5)
+#' spearmanBrown(.5)
 #' 
-SpearmanBrown<-function(r,ntests=2){
+spearmanBrown<-function(r,ntests=2){
   sb<-ntests*r / (1+(ntests-1)*r)
   return(sb)
 }
