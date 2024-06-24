@@ -122,27 +122,4 @@ IntegerMatrix bootstrapWeights(int size, int times){
   return out;
 }
 
-// exclude legacy content
-// include splitted variables in printed output
-// make an easily applicable splitter function, dont expose the c++ function
-// consider making a piped version of the package
-
-//done
-// end every sentence with a . and start with a capital
-// eliminate snake case
-// add examples to every function
-// use ByMask/ByWeight naming convention everywhere
-// refer to all weights as frequency weights
-// name all first input args "x"
-// name all data inputs "data"
-// remove mentions of RT
-// add progress bar and verbose mode
-// use dromedary case everywhere
-// add an input checker
-// ensure consistent types for every input argument that has the same name across functions
-// use nobs, nrow, ncol, etc if applicable
-
-//dropped
-// use describeIn for multi-function help files
-// add divisor variable
 

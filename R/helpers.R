@@ -21,6 +21,7 @@ clamp.range<-function(x){
   x
 }
 
+# takes vector input
 makeCustomAggregator<-function(fun){
   function(x,mask){
     out<-numeric(ncol(mask))
@@ -31,7 +32,19 @@ makeCustomAggregator<-function(fun){
   }
 }
 
-datachecker<-function(data,subjvar,diffvars,stratvars,subscorevar,aggvar,standardize){
+# takes matrix input
+makeCustomAggregator2<-function(fun){
+  function(x,mask){
+    out<-numeric(ncol(mask))
+    for(i in seq_len(ncol(mask))){
+      out[i]<-fun(x[mask[,i,drop=T],i])
+    }
+    return(out)
+  }
+}
+
+datachecker<-function(data,subjvar,diffvars,stratvars,subscorevar,aggvar,
+                      errorhandling,standardize){
   if(!is.data.frame(data)){
     stop("Input dataset not a data.frame.")
   }
@@ -55,11 +68,14 @@ datachecker<-function(data,subjvar,diffvars,stratvars,subscorevar,aggvar,standar
       stop("Argument stratvars must be a character vector.")
     }
   }
-  if(!is.numeric(data[[aggvar]])){
+  if(length(aggvar)>1){
+    stop("Can only have one aggvar.")
+  }else if(!is.numeric(data[[aggvar]])){
     stop("The variable specified by aggvar must be numeric.")
   }
   
-  if(!all(c(subjvar,diffvars,stratvars,subscorevar,aggvar) %in% names(data))){
+  if(!all(c(subjvar,diffvars,stratvars,subscorevar,aggvar,
+            errorhandling$blockvar,errorhandling$errorvar) %in% names(data))){
     stop("Not all specified columns present in data.")
   }
   if(length(intersect(diffvars,stratvars))>0){
@@ -154,4 +170,20 @@ datachecker<-function(data,subjvar,diffvars,stratvars,subscorevar,aggvar,standar
       }
     }
   }
+}
+
+checkerrorhandling<-function(x){
+  if(length(x$type)>1){
+    x$type<-x$type[1]
+  }
+  if(length(x$type)==0){
+    x$type<-"none"
+  }
+  missings<-setdiff(c("errorvar","blockvar"),names(x))
+  missings<-vector(mode="list",length=length(missings)) |> setNames(missings)
+  x<-c(x,missings)
+  if(length(x$fixedpenalty)==0){
+    x$fixedpenalty<-600
+  }
+  return(x)
 }

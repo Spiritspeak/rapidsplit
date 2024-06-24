@@ -1,7 +1,7 @@
 [
     {
         "file": "X:/AATREL_project/data/rapidsplit/src/applyItersplits.cpp",
-        "file_last_write": 1718362682.0,
+        "file_last_write": 1719241975.0,
         "definitions": [
             {
                 "usr": "c:@F@stratifiedItersplits#I#$@N@Rcpp@S@Vector>#VI13#@N@Rcpp@ST>1#T@PreserveStorage#",
@@ -55,7 +55,7 @@
     },
     {
         "file": "X:/AATREL_project/data/rapidsplit/src/matrixAggregators.cpp",
-        "file_last_write": 1718361996.0,
+        "file_last_write": 1718718748.0,
         "definitions": [
             {
                 "usr": "c:@F@colMedians#$@N@Rcpp@S@Matrix>#VI14#@N@Rcpp@ST>1#T@PreserveStorage#",
@@ -68,12 +68,22 @@
                 "hidden": false
             },
             {
+                "usr": "c:@F@colProds#$@N@Rcpp@S@Matrix>#VI14#@N@Rcpp@ST>1#T@PreserveStorage#",
+                "kind": 6,
+                "parent_name": "",
+                "name": "colProds(Rcpp::NumericMatrix)",
+                "file": "X:/AATREL_project/data/rapidsplit/src/matrixAggregators.cpp",
+                "line": 37,
+                "column": 15,
+                "hidden": false
+            },
+            {
                 "usr": "c:@F@colSds#$@N@Rcpp@S@Matrix>#VI14#@N@Rcpp@ST>1#T@PreserveStorage#",
                 "kind": 6,
                 "parent_name": "",
                 "name": "colSds(Rcpp::NumericMatrix)",
                 "file": "X:/AATREL_project/data/rapidsplit/src/matrixAggregators.cpp",
-                "line": 38,
+                "line": 55,
                 "column": 15,
                 "hidden": false
             },
@@ -83,7 +93,7 @@
                 "parent_name": "",
                 "name": "colMediansMasked(Rcpp::NumericMatrix, Rcpp::LogicalMatrix)",
                 "file": "X:/AATREL_project/data/rapidsplit/src/matrixAggregators.cpp",
-                "line": 60,
+                "line": 77,
                 "column": 15,
                 "hidden": false
             },
@@ -93,7 +103,7 @@
                 "parent_name": "",
                 "name": "colMeansMasked(Rcpp::NumericMatrix, Rcpp::LogicalMatrix)",
                 "file": "X:/AATREL_project/data/rapidsplit/src/matrixAggregators.cpp",
-                "line": 79,
+                "line": 96,
                 "column": 15,
                 "hidden": false
             },
@@ -103,7 +113,7 @@
                 "parent_name": "",
                 "name": "colSdsMasked(Rcpp::NumericMatrix, Rcpp::LogicalMatrix)",
                 "file": "X:/AATREL_project/data/rapidsplit/src/matrixAggregators.cpp",
-                "line": 98,
+                "line": 115,
                 "column": 15,
                 "hidden": false
             },
@@ -113,7 +123,7 @@
                 "parent_name": "",
                 "name": "mediansByMask(Rcpp::NumericVector, Rcpp::LogicalMatrix)",
                 "file": "X:/AATREL_project/data/rapidsplit/src/matrixAggregators.cpp",
-                "line": 157,
+                "line": 174,
                 "column": 15,
                 "hidden": false
             },
@@ -123,7 +133,7 @@
                 "parent_name": "",
                 "name": "meansByMask(Rcpp::NumericVector, Rcpp::LogicalMatrix)",
                 "file": "X:/AATREL_project/data/rapidsplit/src/matrixAggregators.cpp",
-                "line": 177,
+                "line": 194,
                 "column": 15,
                 "hidden": false
             },
@@ -133,7 +143,7 @@
                 "parent_name": "",
                 "name": "sdsByMask(Rcpp::NumericVector, Rcpp::LogicalMatrix)",
                 "file": "X:/AATREL_project/data/rapidsplit/src/matrixAggregators.cpp",
-                "line": 199,
+                "line": 216,
                 "column": 15,
                 "hidden": false
             },
@@ -143,7 +153,7 @@
                 "parent_name": "",
                 "name": "mediansByWeight(Rcpp::NumericVector, Rcpp::IntegerMatrix)",
                 "file": "X:/AATREL_project/data/rapidsplit/src/matrixAggregators.cpp",
-                "line": 225,
+                "line": 243,
                 "column": 15,
                 "hidden": false
             },
@@ -153,7 +163,7 @@
                 "parent_name": "",
                 "name": "meansByWeight(Rcpp::NumericVector, Rcpp::IntegerMatrix)",
                 "file": "X:/AATREL_project/data/rapidsplit/src/matrixAggregators.cpp",
-                "line": 276,
+                "line": 294,
                 "column": 15,
                 "hidden": false
             },
@@ -163,7 +173,7 @@
                 "parent_name": "",
                 "name": "sdsByWeight(Rcpp::NumericVector, Rcpp::NumericMatrix)",
                 "file": "X:/AATREL_project/data/rapidsplit/src/matrixAggregators.cpp",
-                "line": 296,
+                "line": 314,
                 "column": 15,
                 "hidden": false
             }
@@ -172,7 +182,7 @@
     },
     {
         "file": "X:/AATREL_project/data/rapidsplit/src/outlierRemovers.cpp",
-        "file_last_write": 1718357467.0,
+        "file_last_write": 1718978892.0,
         "definitions": [
             {
                 "usr": "c:@F@excludeOutliersByMask#$@N@Rcpp@S@Vector>#VI14#@N@Rcpp@ST>1#T@PreserveStorage#$@N@Rcpp@S@Matrix>#VI10#@N@Rcpp@ST>1#T@PreserveStorage#d#",
@@ -201,6 +211,16 @@
                 "name": "maskOutliersMasked(Rcpp::NumericMatrix, Rcpp::LogicalMatrix, double)",
                 "file": "X:/AATREL_project/data/rapidsplit/src/outlierRemovers.cpp",
                 "line": 110,
+                "column": 15,
+                "hidden": false
+            },
+            {
+                "usr": "c:@F@ReplaceErrorsFixed#$@N@Rcpp@S@Matrix>#VI14#@N@Rcpp@ST>1#T@PreserveStorage#$@N@Rcpp@S@Matrix>#VI10#@N@Rcpp@ST>1#T@PreserveStorage#$@N@Rcpp@S@Vector>#VI10#@N@Rcpp@ST>1#T@PreserveStorage#d#",
+                "kind": 6,
+                "parent_name": "",
+                "name": "ReplaceErrorsFixed(Rcpp::NumericMatrix, Rcpp::LogicalMatrix, Rcpp::LogicalVector, double)",
+                "file": "X:/AATREL_project/data/rapidsplit/src/outlierRemovers.cpp",
+                "line": 138,
                 "column": 15,
                 "hidden": false
             }

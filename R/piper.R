@@ -187,7 +187,9 @@ reduceRows<-function(indices,aggs,groupvars,collapsevar,
 #                      aggfunc=meansByMask,mask=list(splits$keys,!splits$keys))
 # 
 # rapidsplit(data=foodAAT,subjvar="subjectid",diffvars=c("is_pull"),stratvars=c("stimid"),
-#             aggvar="RT",splits=1000)
+#             aggvar="RT",splits=10000)
+
+
 
 
 

@@ -4,6 +4,7 @@
 \alias{rapidsplit}
 \alias{print.rapidsplit}
 \alias{plot.rapidsplit}
+\alias{rapidsplit.chunks}
 \alias{rapidsplit-package}
 \title{rapidsplit}
 \usage{
@@ -15,8 +16,9 @@ rapidsplit(
   subscorevar = NULL,
   aggvar,
   splits,
-  aggfunc = c("means", "medians", "custom"),
-  custom.aggfunc = NULL,
+  aggfunc = c("means", "medians"),
+  errorhandling = list(type = c("none", "fixedpenalty"), errorvar = NULL, fixedpenalty =
+    600, blockvar = NULL),
   standardize = FALSE,
   include.scores = TRUE,
   verbose = TRUE,
@@ -31,40 +33,69 @@ rapidsplit(
   show.labels = TRUE,
   ...
 )
+
+rapidsplit.chunks(
+  data,
+  subjvar,
+  diffvars = NULL,
+  stratvars = NULL,
+  subscorevar = NULL,
+  aggvar,
+  splits,
+  aggfunc = c("means", "medians", "custom"),
+  errorhandling = list(type = c("none", "fixedpenalty"), errorvar = NULL, fixedpenalty =
+    600, blockvar = NULL),
+  standardize = FALSE,
+  include.scores = TRUE,
+  verbose = TRUE,
+  check = TRUE,
+  chunks = 4,
+  cluster = NULL
+)
 }
 \arguments{
 \item{data}{Dataset, a \code{data.frame}.}
 
 \item{subjvar}{Subject ID variable name, a \code{character}.}
 
-\item{diffvars}{Names of variables that determine which conditions 
+\item{diffvars}{Names of variables that determine which conditions
 need to be subtracted from each other, \code{character}.}
 
-\item{stratvars}{Additional variables that the splits should 
+\item{stratvars}{Additional variables that the splits should
 be stratified by; a \code{character}.}
 
-\item{subscorevar}{Variable identifying subgroups within a participant's data 
-from which separate scores should be computed. To compute a participant's final score,
-these subscores will be averaged together. A \code{character}.}
+\item{subscorevar}{A \code{character} variable identifying subgroups within
+a participant's data from which separate scores should be computed.
+To compute a participant's final score, these subscores will be averaged together.
+A typical use case is the D-score of the implicit association task.}
 
 \item{aggvar}{Name of variable whose values to aggregate, a \code{character}.
 Examples include reaction times and error rates.}
 
-\item{splits}{Number of split-halves to average, an \code{integer}.}
+\item{splits}{Number of split-halves to average, an \code{integer}.
+It is recommended to use around 5000.}
 
-\item{aggfunc}{The function by which to aggregate the variable 
-defined in \code{aggvar}; can be \code{"means"}, \code{"medians"}, 
-or a \code{"custom"} function, given with \code{"custom.aggfunc"}.}
-
-\item{custom.aggfunc}{A function that takes a numeric vector and outputs a single value,
-to be used to aggregate a participant's values per condition. 
+\item{aggfunc}{The function by which to aggregate the variable
+defined in \code{aggvar}; can be \code{"means"}, \code{"medians"},
+or a custom function (not a function name).
+This custom function must take a numeric vector and output a single value.
 Only if \code{aggfunc} is set to \code{"custom"}.}
 
-\item{standardize}{Whether to divide by scores by the subject's SD; a \code{logical}.}
+\item{errorhandling}{A list with 4 named items, to be used to replace error trials
+with the block mean of correct responses plus a fixed penalty, as in the IAT D-score.
+The 4 items are \code{type} which can be set to \code{"none"} for no error replacement,
+or \code{"fixedpenalty"} to replace error trials as described;
+\code{errorvar} requires name of the \code{logical} variable indicating an incorrect response
+(as \code{TRUE}); \code{fixedpenalty} indicates how much of a penalty should be added
+to said block mean; and \code{blockvar} indicates the name of the block variable.}
+
+\item{standardize}{Whether to divide by scores by the subject's SD; a \code{logical}.
+Regardless of whether error penalization is utilized, this standardization
+will be based on the unpenalized SD of correct and incorrect trials, as in the IAT D-score.}
 
 \item{include.scores}{Include all individual split-half scores?}
 
-\item{verbose}{Display progress bars?}
+\item{verbose}{Display progress bars? Defaults to \code{TRUE}.}
 
 \item{check}{Check input for possible problems?}
 
@@ -80,21 +111,52 @@ the \code{"minimum"} or \code{"maximum"} split-half correlation, or any \code{"r
 
 \item{show.labels}{Should participant IDs be shown above their points in the scatterplot?
 Defaults to \code{TRUE} and is ignored when \code{type} is \code{"all"}.}
+
+\item{chunks}{Number of chunks to divide the splits in, for more memory-efficient computation,
+and to divide over multiple cores if requested.}
+
+\item{cluster}{Chunks will be run on separate cores if a cluster is provided, 
+or an \code{integer} specifying the number of cores. Otherwise, if the value is \code{NULL},
+the chunks are run sequentially.}
 }
 \value{
-A \code{list} containing 
-
-* \code{r}: the averaged reliability.
-
-* \code{allcors}: a vector with the reliability of each iteration.
-
-* \code{nobs}: the number of participants.
-
-* \code{scores}: the individual participants scores in each split-half, 
+A \code{list} containing
+\itemize{
+\item \code{r}: the averaged reliability.
+\item \code{allcors}: a vector with the reliability of each iteration.
+\item \code{nobs}: the number of participants.
+\item \code{scores}: the individual participants scores in each split-half,
 contained in a list with two matrices (Only included if requested with \code{include.scores}).
+}
 }
 \description{
 A very fast algorithm for computing stratified permutated split-half reliability.
+}
+\details{
+The order of operations (with optional steps between brackets) is:
+\itemize{
+\item Splitting
+\item (Replacing error trials within block within split)
+\item Computing aggregates per condition (per subscore) per person
+\item Subtracting conditions from each other
+\item (Dividing the resulting (sub)score by the SD of the data used to compute that (sub)score)
+\item (Averaging subscores together into a single score per person)
+\item Correlating scores from one half with scores from the other half
+\item Applying the Spearman-Brown correction using \code{\link[=spearmanBrown]{spearmanBrown()}}
+\item Computing the average split-half reliability using \code{\link[=cormean]{cormean()}}
+}
+}
+\note{
+\itemize{
+\item This function can use a lot of memory in one go.
+If you're computing the reliability of a large dataset or you have little RAM,
+it may pay off to use the sequential version of this function instead:
+\code{\link[=rapidsplit.chunks]{rapidsplit.chunks()}}
+\item It is currently unclear it is better to pre-process your data before or after splitting it.
+If you are computing the IAT D-score,
+you can therefore use \code{errorhandling} and \code{standardize} to perform these two actions
+after splitting, or you can process your data before splitting and forgo these two options.
+}
 }
 \examples{
 
@@ -107,25 +169,51 @@ frel<-rapidsplit(data=foodAAT,
                  diffvars=c("is_pull","is_target"),
                  stratvars="stimid",
                  aggvar="RT",
-                 splits=1000,
-                 aggfunc="mean")
+                 splits=100)
                  
 print(frel)
 
 plot(frel,type="all")
 
-# Unstratified reliability of the median RT
-rapidsplit(data=foodAAT,
-           subjvar="subjectid",
-           aggvar="RT",
-           splits=1000,
-           aggfunc="median")
            
 # Compute a single random split-half reliability of the error rate
 rapidsplit(data=foodAAT,
            subjvar="subjectid",
            aggvar="error",
            splits=1,
-           aggfunc="mean")
-                 
+           aggfunc="means")
+
+# Compute the reliability of an IAT D-score
+data(raceIAT)
+rapidsplit(data=raceIAT,
+           subjvar="session_id",
+           diffvars="congruent",
+           subscorevar="blocktype",
+           aggvar="latency",
+           errorhandling=list(type="fixedpenalty",errorvar="error",
+                              fixedpenalty=600,blockvar="block_number"),
+           splits=100,
+           standardize=TRUE)
+
+
+# Unstratified reliability of the median RT
+rapidsplit.chunks(data=foodAAT,
+                  subjvar="subjectid",
+                  aggvar="RT",
+                  splits=100,
+                  aggfunc="medians",
+                  chunks=8)
+
+# Compute the reliability of Tukey's trimean of the RT
+# on 2 CPU cores
+trimean<-function(x){ 
+  sum(quantile(x,c(.25,.5,.75))*c(1,2,1))/4
+}
+rapidsplit.chunks(data=foodAAT,
+                  subjvar="subjectid",
+                  aggvar="RT",
+                  splits=200,
+                  aggfunc=trimean,
+                  cluster=2)
+
 }

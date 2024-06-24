@@ -1,0 +1,14 @@
+---
+title: "Readme for {rapidsplithalf}"
+author: "Sercan Kahveci"
+date: "`r Sys.Date()`"
+output: md_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Readme content
+
+

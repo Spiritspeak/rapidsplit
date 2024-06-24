@@ -238,6 +238,20 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// ReplaceErrorsFixed
+NumericMatrix ReplaceErrorsFixed(NumericMatrix x, LogicalMatrix mask, LogicalVector error, double penalty);
+RcppExport SEXP _rapidsplit_ReplaceErrorsFixed(SEXP xSEXP, SEXP maskSEXP, SEXP errorSEXP, SEXP penaltySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type x(xSEXP);
+    Rcpp::traits::input_parameter< LogicalMatrix >::type mask(maskSEXP);
+    Rcpp::traits::input_parameter< LogicalVector >::type error(errorSEXP);
+    Rcpp::traits::input_parameter< double >::type penalty(penaltySEXP);
+    rcpp_result_gen = Rcpp::wrap(ReplaceErrorsFixed(x, mask, error, penalty));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_rapidsplit_stratifiedItersplits", (DL_FUNC) &_rapidsplit_stratifiedItersplits, 2},
@@ -259,6 +273,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_rapidsplit_excludeOutliersByMask", (DL_FUNC) &_rapidsplit_excludeOutliersByMask, 3},
     {"_rapidsplit_maskOutliers", (DL_FUNC) &_rapidsplit_maskOutliers, 2},
     {"_rapidsplit_maskOutliersMasked", (DL_FUNC) &_rapidsplit_maskOutliersMasked, 3},
+    {"_rapidsplit_ReplaceErrorsFixed", (DL_FUNC) &_rapidsplit_ReplaceErrorsFixed, 4},
     {NULL, NULL, 0}
 };
 

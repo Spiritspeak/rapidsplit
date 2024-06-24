@@ -5,7 +5,7 @@
 \alias{foodAAT}
 \title{Approach-Avoidance Task examining approach bias to different foods}
 \format{
-An object of class \code{"data.frame"}
+An object of class \code{"data.frame"}.
 }
 \source{
 \href{https://doi.org/10.1016/j.appet.2018.01.032}{Original study}
@@ -19,24 +19,26 @@ Participants responded to the stimulus category (food or object) by pulling or p
 Instructions were flipped from one block to the next.
 }
 \details{
-* subjectid: Participant ID
-* stimid: Stimulus ID
-* is_pull: Whether the trial required an approach response (1) or an avoid response (0)
-* is_target: Whether the trial featured a food stimulus (1) or an object stimulus (0)
-* error: Whether the response was incorrect (1) or correct (0)
-* RT: The response initiation time
-* FullRT: The time from stimulus onset to response completion
-* trialnum: The trial number
-* blocknum: The block number
-* palatability: The participant's palatability rating for the stimulus (foods only)
-* valence: The participant's valence rating for the stimulus
-* FCQS_2_craving: The participant's FCQS state food craving score at time of testing
-* FCQS_2_hunger: The participant's FCQS state hunger score at time of testing
+\itemize{
+\item subjectid: Participant ID.
+\item stimid: Stimulus ID.
+\item is_pull: Whether the trial required an approach response (1) or an avoid response (0).
+\item is_target: Whether the trial featured a food stimulus (1) or an object stimulus (0).
+\item error: Whether the response was incorrect (1) or correct (0).
+\item RT: The response initiation time.
+\item FullRT: The time from stimulus onset to response completion.
+\item trialnum: The trial number.
+\item blocknum: The block number.
+\item palatability: The participant's palatability rating for the stimulus (foods only).
+\item valence: The participant's valence rating for the stimulus.
+\item FCQS_2_craving: The participant's FCQS state food craving score at time of testing.
+\item FCQS_2_hunger: The participant's FCQS state hunger score at time of testing.
+}
 }
 \references{
-Lender, A., Meule, A., Rinck, M., Brockmeyer, T., & Blechert, J. (2018). 
-Measurement of food-related approach–avoidance biases: 
-Larger biases when food stimuli are task relevant. Appetite, 125, 42–47. 
+Lender, A., Meule, A., Rinck, M., Brockmeyer, T., & Blechert, J. (2018).
+Measurement of food-related approach–avoidance biases:
+Larger biases when food stimuli are task relevant. Appetite, 125, 42–47.
 \href{https://doi.org/10.1016/j.appet.2018.01.032}{10.1016/j.appet.2018.01.032}
 }
 \keyword{datasets}

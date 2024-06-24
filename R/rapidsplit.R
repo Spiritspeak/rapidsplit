@@ -16,16 +16,25 @@
 #' A typical use case is the D-score of the implicit association task.
 #' @param aggvar Name of variable whose values to aggregate, a \code{character}.
 #' Examples include reaction times and error rates.
-#' @param splits Number of split-halves to average, an \code{integer}.
+#' @param splits Number of split-halves to average, an \code{integer}. 
+#' It is recommended to use around 5000.
 #' @param aggfunc The function by which to aggregate the variable 
 #' defined in \code{aggvar}; can be \code{"means"}, \code{"medians"}, 
-#' or a \code{"custom"} function, given with \code{"custom.aggfunc"}.
-#' @param custom.aggfunc A function that takes a numeric vector and outputs a single value,
-#' to be used to aggregate a participant's values per condition. 
+#' or a custom function (not a function name). 
+#' This custom function must take a numeric vector and output a single value.
 #' Only if \code{aggfunc} is set to \code{"custom"}.
-#' @param standardize Whether to divide by scores by the subject's SD; a \code{logical}.
+#' @param errorhandling A list with 4 named items, to be used to replace error trials
+#'  with the block mean of correct responses plus a fixed penalty, as in the IAT D-score.
+#'  The 4 items are \code{type} which can be set to \code{"none"} for no error replacement, 
+#'  or \code{"fixedpenalty"} to replace error trials as described;
+#'  \code{errorvar} requires name of the \code{logical} variable indicating an incorrect response
+#'  (as \code{TRUE}); \code{fixedpenalty} indicates how much of a penalty should be added 
+#'  to said block mean; and \code{blockvar} indicates the name of the block variable.
+#' @param standardize Whether to divide by scores by the subject's SD; a \code{logical}. 
+#' Regardless of whether error penalization is utilized, this standardization 
+#' will be based on the unpenalized SD of correct and incorrect trials, as in the IAT D-score.
 #' @param include.scores Include all individual split-half scores?
-#' @param verbose Display progress bars?
+#' @param verbose Display progress bars? Defaults to \code{TRUE}.
 #' @param check Check input for possible problems?
 #'
 #' @return A \code{list} containing 
@@ -38,6 +47,31 @@
 #' 
 #' * \code{scores}: the individual participants scores in each split-half, 
 #' contained in a list with two matrices (Only included if requested with \code{include.scores}).
+#' 
+#' @md
+#' 
+#' @note
+#' * This function can use a lot of memory in one go. 
+#' If you're computing the reliability of a large dataset or you have little RAM, 
+#' it may pay off to use the sequential version of this function instead: 
+#' [rapidsplit.chunks()]
+#' 
+#' * It is currently unclear it is better to pre-process your data before or after splitting it. 
+#' If you are computing the IAT D-score, 
+#' you can therefore use \code{errorhandling} and \code{standardize} to perform these two actions
+#' after splitting, or you can process your data before splitting and forgo these two options.
+#' 
+#' @details
+#' The order of operations (with optional steps between brackets) is: 
+#' * Splitting
+#' * (Replacing error trials within block within split)
+#' * Computing aggregates per condition (per subscore) per person
+#' * Subtracting conditions from each other
+#' * (Dividing the resulting (sub)score by the SD of the data used to compute that (sub)score)
+#' * (Averaging subscores together into a single score per person)
+#' * Correlating scores from one half with scores from the other half
+#' * Applying the Spearman-Brown correction using [spearmanBrown()]
+#' * Computing the average split-half reliability using [cormean()]
 #' 
 #' @export
 #'
@@ -52,18 +86,12 @@
 #'                  diffvars=c("is_pull","is_target"),
 #'                  stratvars="stimid",
 #'                  aggvar="RT",
-#'                  splits=1000)
+#'                  splits=100)
 #'                  
 #' print(frel)
 #' 
 #' plot(frel,type="all")
 #' 
-#' # Unstratified reliability of the median RT
-#' rapidsplit(data=foodAAT,
-#'            subjvar="subjectid",
-#'            aggvar="RT",
-#'            splits=1000,
-#'            aggfunc="medians")
 #'            
 #' # Compute a single random split-half reliability of the error rate
 #' rapidsplit(data=foodAAT,
@@ -71,40 +99,41 @@
 #'            aggvar="error",
 #'            splits=1,
 #'            aggfunc="means")
-#'            
-#' # Compute standardized mean differences between pulling and pushing RTs
-#' # separately for both blocks. Then average the value from both blocks together.
-#' rapidsplit(data=foodAAT,
-#'            subjvar="subjectid",
-#'            diffvars="is_pull",
-#'            subscorevar="blocknum",
-#'            aggvar="RT",
-#'            splits=1000,
+#' 
+#' # Compute the reliability of an IAT D-score
+#' data(raceIAT)
+#' rapidsplit(data=raceIAT,
+#'            subjvar="session_id",
+#'            diffvars="congruent",
+#'            subscorevar="blocktype",
+#'            aggvar="latency",
+#'            errorhandling=list(type="fixedpenalty",errorvar="error",
+#'                               fixedpenalty=600,blockvar="block_number"),
+#'            splits=100,
 #'            standardize=TRUE)
 #' 
 rapidsplit<-function(data,subjvar,diffvars=NULL,stratvars=NULL,subscorevar=NULL,
-                     aggvar,splits,
-                     aggfunc=c("means","medians","custom"),custom.aggfunc=NULL,
-                     standardize=FALSE,include.scores=TRUE,verbose=TRUE,check=TRUE){
-  aggfunc<-match.arg(aggfunc)
-  if(aggfunc=="means"){
-    aggfunc<-meansByMask
-  }else if(aggfunc=="medians"){
-    aggfunc<-mediansByMask
-  }else if(aggfunc=="custom"){
-    aggfunc<-makeCustomAggregator(custom.aggfunc)
-  }
+                      aggvar,splits,
+                      aggfunc=c("means","medians"),
+                      errorhandling=list(type=c("none","fixedpenalty"),
+                                         errorvar=NULL,fixedpenalty=600,blockvar=NULL),
+                      standardize=FALSE,include.scores=TRUE,verbose=TRUE,check=TRUE){
   data<-as.data.frame(data)
+  
+  # process errorhandling object
+  errorhandling<-checkerrorhandling(errorhandling)
   
   # check input
   if(check){
     datachecker(data=data,subjvar=subjvar,diffvars=diffvars,stratvars=stratvars,
-                subscorevar=subscorevar,aggvar=aggvar,standardize=standardize)
+                subscorevar=subscorevar,aggvar=aggvar,
+                errorhandling=errorhandling,standardize=standardize)
   }
   
   # Arrange properly
-  runorder<-do.call(order,data[c(subjvar,subscorevar,diffvars,stratvars)])
-  arr.ds<- data[runorder,c(subjvar,subscorevar,diffvars,stratvars,aggvar)]
+  runorder<-do.call(order,data[c(subjvar,subscorevar,errorhandling$blockvar,diffvars,stratvars)])
+  arr.ds<- data[runorder,c(subjvar,subscorevar,errorhandling$blockvar,diffvars,stratvars,
+                           aggvar,errorhandling$errorvar)]
   origpps<-unique(arr.ds[[subjvar]])
   arr.ds[c(subjvar,subscorevar,diffvars,stratvars)]<-
     cols2ids(arr.ds[c(subjvar,subscorevar,diffvars,stratvars)])
@@ -119,7 +148,7 @@ rapidsplit<-function(data,subjvar,diffvars=NULL,stratvars=NULL,subscorevar=NULL,
   subscorelist<-split(arr.ds,arr.ds[[".subscore"]])
   difflist<-split(arr.ds,arr.ds[[".diffidx"]])
   
-  # Compute splithalves by subscore
+  # Compute splithalf masks by subscore
   keys<-setNames(vector(mode="list",length=length(subscores)),subscores)
   if(verbose){
     cat("Generating splits...\n")
@@ -133,10 +162,78 @@ rapidsplit<-function(data,subjvar,diffvars=NULL,stratvars=NULL,subscorevar=NULL,
     if(length(grsizes)==0){grsizes<-nrow(iterds)}
     keys[[ss]]<-stratifiedItersplits(splits=splits, groupsizes=grsizes)
   }
+  antikeys<-lapply(keys,function(x) !x)
   if(verbose){close(pb)}
   
-  # get the other half by inverting the logical matrix
-  antikeys<-lapply(keys,function(x) !x)
+  # Generate aggvar matrix and apply error rule
+  if(errorhandling$type!="none"){
+    aggdim<-"matrix"
+    arr.ds[[".blockidx"]]<-
+      do.call(paste,arr.ds[,c(subjvar,subscorevar,errorhandling$blockvar),drop=FALSE])
+    blockidx<-unique(arr.ds[[".blockidx"]])
+    aggmats<-split(x=arr.ds[[aggvar]],f=arr.ds[[".blockidx"]])[blockidx] |> 
+      lapply(function(x){ matrix(x,nrow=length(x),ncol=splits)})
+    
+    # Apply error rule
+    if(verbose){
+      cat("Replacing error trials\n")
+      pb = txtProgressBar(min = 0, max = length(blockidx), initial = 0)
+    }
+    for(i in seq_along(blockidx)){
+      if(verbose){ setTxtProgressBar(pb,i) }
+      
+      # get mask
+      ss<-arr.ds[[".subscore"]][arr.ds[[".blockidx"]]==blockidx[i]][1]
+      maskkey<-arr.ds[arr.ds[[".subscore"]]==ss,".blockidx"]==blockidx[i]
+      errorvec<-as.logical(arr.ds[[errorhandling$errorvar]][arr.ds[[".blockidx"]]==blockidx[i]])
+      
+      # replace errors in key
+      aggmats[[blockidx[i]]] <- 
+        ReplaceErrorsFixed(x=aggmats[[blockidx[i]]],
+                           mask=keys[[ss]][maskkey,],
+                           error=errorvec,
+                           penalty=errorhandling[["fixedpenalty"]])
+      
+      # replace errors in antikey
+      aggmats[[blockidx[i]]] <- 
+        ReplaceErrorsFixed(x=aggmats[[blockidx[i]]],
+                           mask=antikeys[[ss]][maskkey,],
+                           error=errorvec,
+                           penalty=errorhandling[["fixedpenalty"]])
+    }
+    # Merge to align with arr.ds
+    aggmat<-do.call(rbind,aggmats)
+    rm(aggmats)
+    if(verbose){close(pb)}
+    
+  }else{
+    aggdim<-"vector"
+  }
+  
+  # Select aggregator type
+  if(all(is.function(aggfunc))){
+    custom.aggfunc<-aggfunc
+    aggfunc<-"custom"
+  }else{
+    aggfunc<-match.arg(aggfunc)
+  }
+  if(aggdim=="vector"){
+    if(aggfunc=="means"){
+      aggfunc<-meansByMask
+    }else if(aggfunc=="medians"){
+      aggfunc<-mediansByMask
+    }else if(aggfunc=="custom"){
+      aggfunc<-makeCustomAggregator(custom.aggfunc)
+    }
+  }else if(aggdim=="matrix"){
+    if(aggfunc=="means"){
+      aggfunc<-colMeansMasked
+    }else if(aggfunc=="medians"){
+      aggfunc<-colMediansMasked
+    }else if(aggfunc=="custom"){
+      aggfunc<-makeCustomAggregator2(custom.aggfunc)
+    }
+  }
   
   # Get aggregates per condition
   keymeans<-antikeymeans<-matrix(ncol=splits,nrow=length(difflist))
@@ -149,13 +246,26 @@ rapidsplit<-function(data,subjvar,diffvars=NULL,stratvars=NULL,subscorevar=NULL,
     if(verbose){ setTxtProgressBar(pb,i) }
     ssid<-difflist[[i]][[".subscore"]][1]
     diffid<-names(difflist)[i]
-    keymeans[i,]<-
-      aggfunc(x=difflist[[i]][[aggvar]],
-              mask=keys[[ssid]][subscorelist[[ssid]][[".diffidx"]]==diffid,,drop=FALSE])
-    antikeymeans[i,]<-
-      aggfunc(x=difflist[[i]][[aggvar]],
-              mask=antikeys[[ssid]][subscorelist[[ssid]][[".diffidx"]]==diffid,,drop=FALSE])
+    
+    if(aggdim=="vector"){
+      keymeans[i,]<-
+        aggfunc(x=difflist[[i]][[aggvar]],
+                mask=keys[[ssid]][subscorelist[[ssid]][[".diffidx"]]==diffid,,drop=FALSE])
+      antikeymeans[i,]<-
+        aggfunc(x=difflist[[i]][[aggvar]],
+                mask=antikeys[[ssid]][subscorelist[[ssid]][[".diffidx"]]==diffid,,drop=FALSE])
+      
+    }else{
+      diffkey<-arr.ds[[".diffidx"]]==diffid
+      keymeans[i,]<-
+        aggfunc(x=aggmat[diffkey,],
+                mask=keys[[ssid]][subscorelist[[ssid]][[".diffidx"]]==diffid,,drop=FALSE])
+      antikeymeans[i,]<-
+        aggfunc(x=aggmat[diffkey,],
+                mask=antikeys[[ssid]][subscorelist[[ssid]][[".diffidx"]]==diffid,,drop=FALSE])
+    }
   }
+  if(aggdim=="matrix"){ rm(aggmat) }
   if(verbose){close(pb)}
   
   # Get scores
@@ -235,7 +345,6 @@ rapidsplit<-function(data,subjvar,diffvars=NULL,stratvars=NULL,subscorevar=NULL,
   return(out)
 }
 
-
 #' @param x \code{rapidsplit} object to print or plot.
 #' @param ... Ignored.
 #' @export
@@ -293,6 +402,132 @@ plot.rapidsplit<-function(x,type=c("average","minimum","maximum","random","all")
   if(length(idx)==1 & show.labels){
     text(h1vals,h2vals,rownames(x$scores$half1),cex= 0.7, pos=3, offset=0.3)
   }
+}
+
+
+
+#' @rdname rapidsplit
+#'
+#' @param chunks Number of chunks to divide the splits in, for more memory-efficient computation,
+#' and to divide over multiple cores if requested.
+#' @param cluster Chunks will be run on separate cores if a cluster is provided, 
+#' or an \code{integer} specifying the number of cores. Otherwise, if the value is \code{NULL},
+#' the chunks are run sequentially.
+#'
+#' @export
+#'
+#' @examples
+#' 
+#' # Unstratified reliability of the median RT
+#' rapidsplit.chunks(data=foodAAT,
+#'                   subjvar="subjectid",
+#'                   aggvar="RT",
+#'                   splits=100,
+#'                   aggfunc="medians",
+#'                   chunks=8)
+#' 
+#' # Compute the reliability of Tukey's trimean of the RT
+#' # on 2 CPU cores
+#' trimean<-function(x){ 
+#'   sum(quantile(x,c(.25,.5,.75))*c(1,2,1))/4
+#' }
+#' rapidsplit.chunks(data=foodAAT,
+#'                   subjvar="subjectid",
+#'                   aggvar="RT",
+#'                   splits=200,
+#'                   aggfunc=trimean,
+#'                   cluster=2)
+#' 
+rapidsplit.chunks<-
+  function(data,subjvar,diffvars=NULL,stratvars=NULL,subscorevar=NULL,
+           aggvar,splits,
+           aggfunc=c("means","medians","custom"),
+           errorhandling=list(type=c("none","fixedpenalty"),
+                              errorvar=NULL,fixedpenalty=600,blockvar=NULL),
+           standardize=FALSE,include.scores=TRUE,verbose=TRUE,check=TRUE,
+           chunks=4,cluster=NULL){
+    
+  # process errorhandling object
+  errorhandling<-checkerrorhandling(errorhandling)
+  
+  # check input
+  if(check){
+    datachecker(data=data,subjvar=subjvar,diffvars=diffvars,stratvars=stratvars,
+                subscorevar=subscorevar,aggvar=aggvar,
+                errorhandling=errorhandling,standardize=standardize)
+  }
+  
+  # Get split counts
+  chunks<-abs(ceiling(chunks))
+  splitsizes<-rep(floor(splits/chunks),chunks)
+  splitsizes[1]<-splitsizes[1] + splits %% chunks
+  splitsizes<-splitsizes[splitsizes>0]
+  chunks<-length(splitsizes)
+  
+  if(is.null(cluster)){
+    # Run split chunks one by one
+    
+    outcomes<-list()
+    if(verbose){ 
+      cat("Running rapidsplit() in chunks...\n")
+      pb = txtProgressBar(min = 0, max = length(splitsizes), initial = 0)  
+    }
+    for(i in seq_along(splitsizes)){
+      if(verbose){ setTxtProgressBar(pb,i) }
+      outcomes[[i]]<-
+        rapidsplit(data=data,subjvar=subjvar,diffvars=diffvars,stratvars=stratvars,
+                   subscorevar=subscorevar,aggvar=aggvar,
+                   splits=splitsizes[i],
+                   aggfunc=aggfunc,
+                   errorhandling=errorhandling,
+                   standardize=standardize,include.scores=include.scores,
+                   verbose=FALSE,check=FALSE)
+    }
+    if(verbose){close(pb)}
+  }else{
+    # If cluster is requested but not given, make one
+    if(is.numeric(cluster)){
+      ncores<-min(parallel::detectCores(),cluster)
+      cluster<-parallel::makeCluster(spec=ncores)
+      on.exit(stopCluster(cluster))
+    }
+    
+    # Run split chunks in parallel
+    ss<-NULL
+    registerDoParallel(cl=cluster,cores=ncores)
+    outcomes<-foreach(ss=splitsizes,
+                      .packages=c("rapidsplit"),
+                      .multicombine=TRUE,
+                      .inorder=FALSE) %dopar% {
+                                    
+      rapidsplit(data=data,subjvar=subjvar,diffvars=diffvars,stratvars=stratvars,
+                 subscorevar=subscorevar,aggvar=aggvar,
+                 splits=ss,
+                 aggfunc=aggfunc,
+                 errorhandling=errorhandling,
+                 standardize=standardize,include.scores=include.scores,
+                 verbose=FALSE,check=FALSE)
+    }
+  }
+  
+  # Merge content
+  output<-list()
+  output[["allcors"]]<-unlist(lapply(outcomes,\(x)x[["allcors"]]))
+  output[["nobs"]]<-outcomes[[1]][["nobs"]]
+  output[["r"]]<-cormean(output[["allcors"]],output[["nobs"]])
+  if(include.scores){
+    output[["scores"]][["half1"]]<-do.call(cbind,lapply(outcomes,\(x)x[["scores"]][["half1"]]))
+    for(i in seq_along(splitsizes)){ outcomes[[i]][["scores"]][["half1"]]<-NULL }
+    output[["scores"]][["half2"]]<-do.call(cbind,lapply(outcomes,\(x)x[["scores"]][["half2"]]))
+    for(i in seq_along(splitsizes)){ outcomes[[i]][["scores"]][["half2"]]<-NULL }
+  }
+  output<-output[c("r","allcors","nobs","scores")]
+  
+  # Add class
+  output<-structure(output,class="rapidsplit")
+  
+  # Return
+  return(output)
 }
 
 

@@ -325,3 +325,7 @@ maskOutliersMasked <- function(x, mask, sdlim = 3) {
     .Call('_rapidsplit_maskOutliersMasked', PACKAGE = 'rapidsplit', x, mask, sdlim)
 }
 
+ReplaceErrorsFixed <- function(x, mask, error, penalty) {
+    .Call('_rapidsplit_ReplaceErrorsFixed', PACKAGE = 'rapidsplit', x, mask, error, penalty)
+}
+

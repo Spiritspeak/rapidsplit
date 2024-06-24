@@ -131,3 +131,24 @@ LogicalMatrix maskOutliersMasked(NumericMatrix x, LogicalMatrix mask, double sdl
    
    return newmask;
 }
+
+
+
+// [[Rcpp::export]]
+NumericMatrix ReplaceErrorsFixed(NumericMatrix x,LogicalMatrix mask,
+                                 LogicalVector error,double penalty){
+   int xcol = x.ncol();
+   
+   for(int i=0; i<xcol; i++){
+      NumericVector currcol=x.column(i);
+      LogicalVector currmask=mask.column(i);
+      NumericVector correctmasked=currcol[(!error) & currmask];
+      double correctmean = mean(correctmasked);
+      
+      LogicalVector incorrectmask = error & currmask;
+      currcol[incorrectmask]=correctmean+penalty;
+      
+      x(_,i) = currcol;
+   }
+   return x;
+}
