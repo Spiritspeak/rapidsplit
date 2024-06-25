@@ -354,7 +354,8 @@ print.rapidsplit<-function(x,...){
                   "rSB (",mf(x$nobs-2),") = ",mf(x$r),
                   ", 95%CI [", mf(quantile(x$allcors,.025)), 
                   ", ", mf(quantile(x$allcors,.975)),"]",
-                  ", p = ",mf(r2p(x$r,x$nobs),digits=3),"\n")
+                  ", p = ",mf(r2p(x$r,x$nobs),digits=3),
+                  ", based on ",length(x$allcors)," permutations","\n")
   cat(coefstr,sep="")
 }
 

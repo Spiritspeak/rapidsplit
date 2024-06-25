@@ -33,7 +33,7 @@
 #'  
 #' @export
 stratifiedItersplits <- function(splits, groupsizes) {
-    .Call('_rapidsplit_stratifiedItersplits', PACKAGE = 'rapidsplit', splits, groupsizes)
+    .Call('_rapidsplithalf_stratifiedItersplits', PACKAGE = 'rapidsplithalf', splits, groupsizes)
 }
 
 #' Bootstrap Weights
@@ -54,7 +54,7 @@ stratifiedItersplits <- function(splits, groupsizes) {
 #' 
 #' @export
 bootstrapWeights <- function(size, times) {
-    .Call('_rapidsplit_bootstrapWeights', PACKAGE = 'rapidsplit', size, times)
+    .Call('_rapidsplithalf_bootstrapWeights', PACKAGE = 'rapidsplithalf', size, times)
 }
 
 #' Correlate two matrices by column
@@ -73,7 +73,7 @@ bootstrapWeights <- function(size, times) {
 #' corByColumns(m1,m2)
 #' 
 corByColumns <- function(x, y) {
-    .Call('_rapidsplit_corByColumns', PACKAGE = 'rapidsplit', x, y)
+    .Call('_rapidsplithalf_corByColumns', PACKAGE = 'rapidsplithalf', x, y)
 }
 
 #' @rdname corByColumns
@@ -84,7 +84,7 @@ corByColumns <- function(x, y) {
 #' corByColumns_mask(m1,m2,mask)
 #' 
 corByColumns_mask <- function(x, y, mask) {
-    .Call('_rapidsplit_corByColumns_mask', PACKAGE = 'rapidsplit', x, y, mask)
+    .Call('_rapidsplithalf_corByColumns_mask', PACKAGE = 'rapidsplithalf', x, y, mask)
 }
 
 #' Fast matrix column aggregators
@@ -99,7 +99,7 @@ corByColumns_mask <- function(x, y, mask) {
 #' @seealso \link[base]{colMeans}, \link{mediansByMask}, \link{maskAggregators}
 #' @export
 colMedians <- function(x) {
-    .Call('_rapidsplit_colMedians', PACKAGE = 'rapidsplit', x)
+    .Call('_rapidsplithalf_colMedians', PACKAGE = 'rapidsplithalf', x)
 }
 
 #' @rdname colAggregators
@@ -108,7 +108,7 @@ colMedians <- function(x) {
 #' colProds(x)
 #' 
 colProds <- function(x) {
-    .Call('_rapidsplit_colProds', PACKAGE = 'rapidsplit', x)
+    .Call('_rapidsplithalf_colProds', PACKAGE = 'rapidsplithalf', x)
 }
 
 #' @rdname colAggregators
@@ -117,7 +117,7 @@ colProds <- function(x) {
 #' colSds(x)
 #' 
 colSds <- function(x) {
-    .Call('_rapidsplit_colSds', PACKAGE = 'rapidsplit', x)
+    .Call('_rapidsplithalf_colSds', PACKAGE = 'rapidsplithalf', x)
 }
 
 #' @rdname colAggregators
@@ -131,7 +131,7 @@ colSds <- function(x) {
 #' 
 #' @export
 colMediansMasked <- function(x, mask) {
-    .Call('_rapidsplit_colMediansMasked', PACKAGE = 'rapidsplit', x, mask)
+    .Call('_rapidsplithalf_colMediansMasked', PACKAGE = 'rapidsplithalf', x, mask)
 }
 
 #' @rdname colAggregators
@@ -140,7 +140,7 @@ colMediansMasked <- function(x, mask) {
 #' colMeansMasked(x,mask)
 #' 
 colMeansMasked <- function(x, mask) {
-    .Call('_rapidsplit_colMeansMasked', PACKAGE = 'rapidsplit', x, mask)
+    .Call('_rapidsplithalf_colMeansMasked', PACKAGE = 'rapidsplithalf', x, mask)
 }
 
 #' @rdname colAggregators
@@ -149,7 +149,7 @@ colMeansMasked <- function(x, mask) {
 #' colSdsMasked(x,mask)
 #' 
 colSdsMasked <- function(x, mask) {
-    .Call('_rapidsplit_colSdsMasked', PACKAGE = 'rapidsplit', x, mask)
+    .Call('_rapidsplithalf_colSdsMasked', PACKAGE = 'rapidsplithalf', x, mask)
 }
 
 #' @title Multi-mask/weight based aggregators
@@ -195,7 +195,7 @@ colSdsMasked <- function(x, mask) {
 #' @seealso \link{colMedians}, \link{colAggregators}
 #' @export
 mediansByMask <- function(x, mask) {
-    .Call('_rapidsplit_mediansByMask', PACKAGE = 'rapidsplit', x, mask)
+    .Call('_rapidsplithalf_mediansByMask', PACKAGE = 'rapidsplithalf', x, mask)
 }
 
 #' @rdname maskAggregators
@@ -206,7 +206,7 @@ mediansByMask <- function(x, mask) {
 #' 
 #' @export
 meansByMask <- function(x, mask) {
-    .Call('_rapidsplit_meansByMask', PACKAGE = 'rapidsplit', x, mask)
+    .Call('_rapidsplithalf_meansByMask', PACKAGE = 'rapidsplithalf', x, mask)
 }
 
 #' @rdname maskAggregators
@@ -218,7 +218,7 @@ meansByMask <- function(x, mask) {
 #'   sdsByMask(currdata$RT,mysplits==1)
 #' 
 sdsByMask <- function(x, mask) {
-    .Call('_rapidsplit_sdsByMask', PACKAGE = 'rapidsplit', x, mask)
+    .Call('_rapidsplithalf_sdsByMask', PACKAGE = 'rapidsplithalf', x, mask)
 }
 
 #' @rdname maskAggregators
@@ -235,7 +235,7 @@ sdsByMask <- function(x, mask) {
 #' 
 #' @export
 mediansByWeight <- function(x, weights) {
-    .Call('_rapidsplit_mediansByWeight', PACKAGE = 'rapidsplit', x, weights)
+    .Call('_rapidsplithalf_mediansByWeight', PACKAGE = 'rapidsplithalf', x, weights)
 }
 
 #' @rdname maskAggregators
@@ -249,7 +249,7 @@ mediansByWeight <- function(x, weights) {
 #' sd(currdata$RT)/sqrt(length(currdata$RT)) 
 #' 
 meansByWeight <- function(x, weights) {
-    .Call('_rapidsplit_meansByWeight', PACKAGE = 'rapidsplit', x, weights)
+    .Call('_rapidsplithalf_meansByWeight', PACKAGE = 'rapidsplithalf', x, weights)
 }
 
 #' @rdname maskAggregators
@@ -261,7 +261,7 @@ meansByWeight <- function(x, weights) {
 #' sd(bootmeans/bootsds)
 #' 
 sdsByWeight <- function(x, weights) {
-    .Call('_rapidsplit_sdsByWeight', PACKAGE = 'rapidsplit', x, weights)
+    .Call('_rapidsplithalf_sdsByWeight', PACKAGE = 'rapidsplithalf', x, weights)
 }
 
 #' Exclude SD-based outliers
@@ -284,7 +284,7 @@ sdsByWeight <- function(x, weights) {
 #' mask[2,3]<-FALSE
 #' excludeOutliersByMask(x,mask)
 excludeOutliersByMask <- function(x, mask, sdlim = 3) {
-    .Call('_rapidsplit_excludeOutliersByMask', PACKAGE = 'rapidsplit', x, mask, sdlim)
+    .Call('_rapidsplithalf_excludeOutliersByMask', PACKAGE = 'rapidsplithalf', x, mask, sdlim)
 }
 
 #' Exclude SD-based outliers in each matrix column
@@ -306,7 +306,7 @@ excludeOutliersByMask <- function(x, mask, sdlim = 3) {
 #' maskOutliers(testmat)
 #' 
 maskOutliers <- function(x, sdlim = 3) {
-    .Call('_rapidsplit_maskOutliers', PACKAGE = 'rapidsplit', x, sdlim)
+    .Call('_rapidsplithalf_maskOutliers', PACKAGE = 'rapidsplithalf', x, sdlim)
 }
 
 #' @rdname OutlierMaskers
@@ -322,10 +322,10 @@ maskOutliers <- function(x, sdlim = 3) {
 #' 
 #' @export
 maskOutliersMasked <- function(x, mask, sdlim = 3) {
-    .Call('_rapidsplit_maskOutliersMasked', PACKAGE = 'rapidsplit', x, mask, sdlim)
+    .Call('_rapidsplithalf_maskOutliersMasked', PACKAGE = 'rapidsplithalf', x, mask, sdlim)
 }
 
 ReplaceErrorsFixed <- function(x, mask, error, penalty) {
-    .Call('_rapidsplit_ReplaceErrorsFixed', PACKAGE = 'rapidsplit', x, mask, error, penalty)
+    .Call('_rapidsplithalf_ReplaceErrorsFixed', PACKAGE = 'rapidsplithalf', x, mask, error, penalty)
 }
 

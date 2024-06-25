@@ -1,6 +1,6 @@
 [
     {
-        "file": "X:/AATREL_project/data/rapidsplit/src/applyItersplits.cpp",
+        "file": "X:/AATREL_project/data/rapidsplithalf/src/applyItersplits.cpp",
         "file_last_write": 1719241975.0,
         "definitions": [
             {
@@ -8,7 +8,7 @@
                 "kind": 6,
                 "parent_name": "",
                 "name": "stratifiedItersplits(int, Rcpp::IntegerVector)",
-                "file": "X:/AATREL_project/data/rapidsplit/src/applyItersplits.cpp",
+                "file": "X:/AATREL_project/data/rapidsplithalf/src/applyItersplits.cpp",
                 "line": 37,
                 "column": 15,
                 "hidden": false
@@ -18,7 +18,7 @@
                 "kind": 6,
                 "parent_name": "",
                 "name": "bootstrapWeights(int, int)",
-                "file": "X:/AATREL_project/data/rapidsplit/src/applyItersplits.cpp",
+                "file": "X:/AATREL_project/data/rapidsplithalf/src/applyItersplits.cpp",
                 "line": 111,
                 "column": 15,
                 "hidden": false
@@ -27,7 +27,7 @@
         "hidden": false
     },
     {
-        "file": "X:/AATREL_project/data/rapidsplit/src/corByColumns.cpp",
+        "file": "X:/AATREL_project/data/rapidsplithalf/src/corByColumns.cpp",
         "file_last_write": 1718297602.0,
         "definitions": [
             {
@@ -35,7 +35,7 @@
                 "kind": 6,
                 "parent_name": "",
                 "name": "corByColumns(Rcpp::NumericMatrix, Rcpp::NumericMatrix)",
-                "file": "X:/AATREL_project/data/rapidsplit/src/corByColumns.cpp",
+                "file": "X:/AATREL_project/data/rapidsplithalf/src/corByColumns.cpp",
                 "line": 22,
                 "column": 15,
                 "hidden": false
@@ -45,7 +45,7 @@
                 "kind": 6,
                 "parent_name": "",
                 "name": "corByColumns_mask(Rcpp::NumericMatrix, Rcpp::NumericMatrix, Rcpp::LogicalMatrix)",
-                "file": "X:/AATREL_project/data/rapidsplit/src/corByColumns.cpp",
+                "file": "X:/AATREL_project/data/rapidsplithalf/src/corByColumns.cpp",
                 "line": 50,
                 "column": 15,
                 "hidden": false
@@ -54,7 +54,7 @@
         "hidden": false
     },
     {
-        "file": "X:/AATREL_project/data/rapidsplit/src/matrixAggregators.cpp",
+        "file": "X:/AATREL_project/data/rapidsplithalf/src/matrixAggregators.cpp",
         "file_last_write": 1718718748.0,
         "definitions": [
             {
@@ -62,7 +62,7 @@
                 "kind": 6,
                 "parent_name": "",
                 "name": "colMedians(Rcpp::NumericMatrix)",
-                "file": "X:/AATREL_project/data/rapidsplit/src/matrixAggregators.cpp",
+                "file": "X:/AATREL_project/data/rapidsplithalf/src/matrixAggregators.cpp",
                 "line": 20,
                 "column": 15,
                 "hidden": false
@@ -72,7 +72,7 @@
                 "kind": 6,
                 "parent_name": "",
                 "name": "colProds(Rcpp::NumericMatrix)",
-                "file": "X:/AATREL_project/data/rapidsplit/src/matrixAggregators.cpp",
+                "file": "X:/AATREL_project/data/rapidsplithalf/src/matrixAggregators.cpp",
                 "line": 37,
                 "column": 15,
                 "hidden": false
@@ -82,7 +82,7 @@
                 "kind": 6,
                 "parent_name": "",
                 "name": "colSds(Rcpp::NumericMatrix)",
-                "file": "X:/AATREL_project/data/rapidsplit/src/matrixAggregators.cpp",
+                "file": "X:/AATREL_project/data/rapidsplithalf/src/matrixAggregators.cpp",
                 "line": 55,
                 "column": 15,
                 "hidden": false
@@ -92,7 +92,7 @@
                 "kind": 6,
                 "parent_name": "",
                 "name": "colMediansMasked(Rcpp::NumericMatrix, Rcpp::LogicalMatrix)",
-                "file": "X:/AATREL_project/data/rapidsplit/src/matrixAggregators.cpp",
+                "file": "X:/AATREL_project/data/rapidsplithalf/src/matrixAggregators.cpp",
                 "line": 77,
                 "column": 15,
                 "hidden": false
@@ -102,7 +102,7 @@
                 "kind": 6,
                 "parent_name": "",
                 "name": "colMeansMasked(Rcpp::NumericMatrix, Rcpp::LogicalMatrix)",
-                "file": "X:/AATREL_project/data/rapidsplit/src/matrixAggregators.cpp",
+                "file": "X:/AATREL_project/data/rapidsplithalf/src/matrixAggregators.cpp",
                 "line": 96,
                 "column": 15,
                 "hidden": false
@@ -112,7 +112,7 @@
                 "kind": 6,
                 "parent_name": "",
                 "name": "colSdsMasked(Rcpp::NumericMatrix, Rcpp::LogicalMatrix)",
-                "file": "X:/AATREL_project/data/rapidsplit/src/matrixAggregators.cpp",
+                "file": "X:/AATREL_project/data/rapidsplithalf/src/matrixAggregators.cpp",
                 "line": 115,
                 "column": 15,
                 "hidden": false
@@ -122,7 +122,7 @@
                 "kind": 6,
                 "parent_name": "",
                 "name": "mediansByMask(Rcpp::NumericVector, Rcpp::LogicalMatrix)",
-                "file": "X:/AATREL_project/data/rapidsplit/src/matrixAggregators.cpp",
+                "file": "X:/AATREL_project/data/rapidsplithalf/src/matrixAggregators.cpp",
                 "line": 174,
                 "column": 15,
                 "hidden": false
@@ -132,7 +132,7 @@
                 "kind": 6,
                 "parent_name": "",
                 "name": "meansByMask(Rcpp::NumericVector, Rcpp::LogicalMatrix)",
-                "file": "X:/AATREL_project/data/rapidsplit/src/matrixAggregators.cpp",
+                "file": "X:/AATREL_project/data/rapidsplithalf/src/matrixAggregators.cpp",
                 "line": 194,
                 "column": 15,
                 "hidden": false
@@ -142,7 +142,7 @@
                 "kind": 6,
                 "parent_name": "",
                 "name": "sdsByMask(Rcpp::NumericVector, Rcpp::LogicalMatrix)",
-                "file": "X:/AATREL_project/data/rapidsplit/src/matrixAggregators.cpp",
+                "file": "X:/AATREL_project/data/rapidsplithalf/src/matrixAggregators.cpp",
                 "line": 216,
                 "column": 15,
                 "hidden": false
@@ -152,7 +152,7 @@
                 "kind": 6,
                 "parent_name": "",
                 "name": "mediansByWeight(Rcpp::NumericVector, Rcpp::IntegerMatrix)",
-                "file": "X:/AATREL_project/data/rapidsplit/src/matrixAggregators.cpp",
+                "file": "X:/AATREL_project/data/rapidsplithalf/src/matrixAggregators.cpp",
                 "line": 243,
                 "column": 15,
                 "hidden": false
@@ -162,7 +162,7 @@
                 "kind": 6,
                 "parent_name": "",
                 "name": "meansByWeight(Rcpp::NumericVector, Rcpp::IntegerMatrix)",
-                "file": "X:/AATREL_project/data/rapidsplit/src/matrixAggregators.cpp",
+                "file": "X:/AATREL_project/data/rapidsplithalf/src/matrixAggregators.cpp",
                 "line": 294,
                 "column": 15,
                 "hidden": false
@@ -172,7 +172,7 @@
                 "kind": 6,
                 "parent_name": "",
                 "name": "sdsByWeight(Rcpp::NumericVector, Rcpp::NumericMatrix)",
-                "file": "X:/AATREL_project/data/rapidsplit/src/matrixAggregators.cpp",
+                "file": "X:/AATREL_project/data/rapidsplithalf/src/matrixAggregators.cpp",
                 "line": 314,
                 "column": 15,
                 "hidden": false
@@ -181,7 +181,7 @@
         "hidden": false
     },
     {
-        "file": "X:/AATREL_project/data/rapidsplit/src/outlierRemovers.cpp",
+        "file": "X:/AATREL_project/data/rapidsplithalf/src/outlierRemovers.cpp",
         "file_last_write": 1718978892.0,
         "definitions": [
             {
@@ -189,7 +189,7 @@
                 "kind": 6,
                 "parent_name": "",
                 "name": "excludeOutliersByMask(Rcpp::NumericVector, Rcpp::LogicalMatrix, double)",
-                "file": "X:/AATREL_project/data/rapidsplit/src/outlierRemovers.cpp",
+                "file": "X:/AATREL_project/data/rapidsplithalf/src/outlierRemovers.cpp",
                 "line": 26,
                 "column": 15,
                 "hidden": false
@@ -199,7 +199,7 @@
                 "kind": 6,
                 "parent_name": "",
                 "name": "maskOutliers(Rcpp::NumericMatrix, double)",
-                "file": "X:/AATREL_project/data/rapidsplit/src/outlierRemovers.cpp",
+                "file": "X:/AATREL_project/data/rapidsplithalf/src/outlierRemovers.cpp",
                 "line": 73,
                 "column": 15,
                 "hidden": false
@@ -209,7 +209,7 @@
                 "kind": 6,
                 "parent_name": "",
                 "name": "maskOutliersMasked(Rcpp::NumericMatrix, Rcpp::LogicalMatrix, double)",
-                "file": "X:/AATREL_project/data/rapidsplit/src/outlierRemovers.cpp",
+                "file": "X:/AATREL_project/data/rapidsplithalf/src/outlierRemovers.cpp",
                 "line": 110,
                 "column": 15,
                 "hidden": false
@@ -219,7 +219,7 @@
                 "kind": 6,
                 "parent_name": "",
                 "name": "ReplaceErrorsFixed(Rcpp::NumericMatrix, Rcpp::LogicalMatrix, Rcpp::LogicalVector, double)",
-                "file": "X:/AATREL_project/data/rapidsplit/src/outlierRemovers.cpp",
+                "file": "X:/AATREL_project/data/rapidsplithalf/src/outlierRemovers.cpp",
                 "line": 138,
                 "column": 15,
                 "hidden": false

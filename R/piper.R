@@ -1,4 +1,3 @@
-#data(foodAAT)
 
 generateSplits<-function(data,subsetvars,stratvars=NULL,splits,verbose=T){
   
@@ -29,9 +28,6 @@ generateSplits<-function(data,subsetvars,stratvars=NULL,splits,verbose=T){
        keys=origkeys[backorder,])
 }
 
-# test<-generateSplits(data=foodAAT,subjvar="subjectid",
-#                      stratvars=c("is_pull","is_target","stimid"),splits=5000)
-
 applyAggregator<-function(data,subsetvars,aggvar,aggfunc,mask,verbose=T){
   subsetvec<-do.call(paste,cols2ids(data[,subsetvars,drop=FALSE]))
   runorder<-order(subsetvec)
@@ -59,9 +55,6 @@ applyAggregator2<-function(data,subsetvars,aggvar,aggfunc,masks,verbose=T){
   }
   outputs
 }
-
-# stuff<-applyAggregator(foodAAT,subsetvars=c("subjectid","is_pull","is_target"),aggvar="RT",
-#                        aggfunc=meansByMask,mask=test$keys)
 
 reduceRows<-function(indices,aggs,groupvars,collapsevar,
                      action=c("subtract","add","divide","multiply"),
@@ -113,84 +106,3 @@ reduceRows<-function(indices,aggs,groupvars,collapsevar,
   }
   list(indices=newindices,aggs=newagg)
 }
-
-# lessstuff<-
-#   reduceRows(indices=stuff$indices,aggs=stuff$aggs,groupvars=c("subjectid","is_target"),
-#            collapsevar="is_pull",highlow=F)
-# lesserstuff<-
-#   reduceRows(indices=lessstuff$indices,aggs=lessstuff$aggs,groupvars=c("subjectid"),
-#              collapsevar="is_target")
-# 
-# 
-
-# library(tictoc)
-# library(rapidsplit)
-# data(foodAAT)
-# tic()
-# splits<-generateSplits(data=foodAAT,subsetvars="subjectid",
-#                        stratvars=c("is_pull","is_target","stimid"),splits=5000)
-# 
-# aggs<-applyAggregator(foodAAT,subsetvars=c("subjectid","is_pull","is_target"),aggvar="RT",
-#                       aggfunc=meansByMask,mask=splits$keys)
-# lessstuff<-
-#   reduceRows(indices=aggs$indices,aggs=aggs$aggs,groupvars=c("subjectid","is_target"),
-#              collapsevar="is_pull",highlow=F)
-# lesserstuff<-
-#   reduceRows(indices=lessstuff$indices,aggs=lessstuff$aggs,groupvars=c("subjectid"),
-#              collapsevar="is_target")
-# 
-# aggs2<-applyAggregator(foodAAT,subsetvars=c("subjectid","is_pull","is_target"),aggvar="RT",
-#                       aggfunc=meansByMask,mask=!splits$keys)
-# lessstuff2<-
-#   reduceRows(indices=aggs2$indices,aggs=aggs2$aggs,groupvars=c("subjectid","is_target"),
-#              collapsevar="is_pull",highlow=F)
-# lesserstuff2<-
-#   reduceRows(indices=lessstuff2$indices,aggs=lessstuff2$aggs,groupvars=c("subjectid"),
-#              collapsevar="is_target")
-# 
-# allcors<-corByColumns(lesserstuff$aggs,lesserstuff2$aggs)
-# SpearmanBrown(allcors) |> cormean(36)
-# toc()
-# 
-# tic()
-# rapidsplit(data=foodAAT,subjvar="subjectid",diffvars=c("is_pull","is_target"),
-#            stratvars=c("stimid"),aggvar="RT",splits=5000,standardize=F)
-# toc()
-# 
-# 
-# lesserstuff2<-
-#   reduceRows(indices=lessstuff2$indices,aggs=lessstuff2$aggs,groupvars=c("subjectid"),
-#              collapsevar="is_target",action="add")
-# 
-# # Allow multiple aggs as input (list)
-# # put data input vars first
-# 
-# 
-# h<-applyAggregator(foodAAT,subsetvars=c("subjectid","is_pull","is_target"),aggvar="RT",
-#                    aggfunc=iqragger,mask=splits$keys)
-# h2<-applyAggregator(foodAAT,subsetvars=c("subjectid","is_pull","is_target"),aggvar="RT",
-#                    aggfunc=sdsByMask,mask=splits$keys)
-# plot(h$aggs[,1],h2$aggs[,1])
-# 
-# splits2<-generateSplits2(data=foodAAT,splitvars=c("subjectid","is_pull","is_target"),
-#                          stratvars=c("stimid"),splits=5000)
-# 
-# 
-# h<-as.numeric(splits$keys)
-# 
-# all.equal(h==1,as.logical(h))
-# 
-# microbenchmark::microbenchmark(h==1,as.logical(h))
-# 
-# 
-# hh<-applyAggregator2(foodAAT,subsetvars=c("subjectid","is_pull","is_target"),aggvar="RT",
-#                      aggfunc=meansByMask,mask=list(splits$keys,!splits$keys))
-# 
-# rapidsplit(data=foodAAT,subjvar="subjectid",diffvars=c("is_pull"),stratvars=c("stimid"),
-#             aggvar="RT",splits=10000)
-
-
-
-
-
-

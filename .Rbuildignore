@@ -1,5 +1,8 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^generate_manual\.R$
-^rapidsplit_.*.pdf$
+^rapidsplithalf_.*.pdf$
+^README\.Rmd$
 
+^doc$
+^Meta$
