@@ -1,5 +1,5 @@
 #' @name correlation-tools
-#' @title Correlation tools
+#' @title Miscellaneous correlation tools
 #' @description Helper functions to compute important statistics from correlation coefficients.
 #' @param r,r1,r2 Correlation values.
 #' @param z Z-scores.
@@ -9,6 +9,13 @@
 #' @param x A \code{compcorr} object to print.
 #' @param ... Ignored.
 #' @seealso \link{cormean}
+#' @return For \code{r2z()}, \code{z2r}, \code{r2t}, \code{t2r}, and \code{r2p}, 
+#' a numeric vector with the requested transformation applied. 
+#' For \code{rconfint()}, a numeric vector with two values representing 
+#' the lower and upper confidence intervals of the correlation coefficient.
+#' For \code{compcorr()}, a \code{compcorr} object containing
+#' a z and p value for the requested comparison, 
+#' which can be printed with \code{print.compcorr()}.
 #' @examples
 #' z <- r2z(.5)
 #' r <- z2r(z)
@@ -59,7 +66,7 @@ rconfint<-function(r,n,alpha=.05){
 #' @describeIn correlation-tools Computes the significance of the difference between two correlation coefficients.
 compcorr<-function(r1,r2,n1,n2){
   zval<-abs(r2z(r1)-r2z(r2)) / sqrt((1/(n1-3)) + (1/(n2-3)))
-  pval<-min(1,pnorm(abs(zval),lower.tail=F)*2)
+  pval<-min(1,pnorm(abs(zval),lower.tail=FALSE)*2)
   return(structure(list(zscore=zval,pvalue=pval),class="compcorr"))
 }
 
@@ -100,7 +107,7 @@ print.compcorr<-function(x,...){
 #' @examples
 #' cormean(c(0,.3,.5),c(30,30,60))
 #' 
-cormean<-function(r,n,weights=c("none","n","df"),type=c("OP5","OP2","OPK"),na.rm=F){
+cormean<-function(r,n,weights=c("none","n","df"),type=c("OP5","OP2","OPK"),na.rm=FALSE){
   type<-match.arg(type)
   weights<-match.arg(weights)
   

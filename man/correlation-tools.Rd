@@ -10,7 +10,7 @@
 \alias{rconfint}
 \alias{compcorr}
 \alias{print.compcorr}
-\title{Correlation tools}
+\title{Miscellaneous correlation tools}
 \usage{
 r2z(r)
 
@@ -42,6 +42,15 @@ compcorr(r1, r2, n1, n2)
 \item{x}{A \code{compcorr} object to print.}
 
 \item{...}{Ignored.}
+}
+\value{
+For \code{r2z()}, \code{z2r}, \code{r2t}, \code{t2r}, and \code{r2p}, 
+a numeric vector with the requested transformation applied. 
+For \code{rconfint()}, a numeric vector with two values representing 
+the lower and upper confidence intervals of the correlation coefficient.
+For \code{compcorr()}, a \code{compcorr} object containing
+a z and p value for the requested comparison, 
+which can be printed with \code{print.compcorr()}.
 }
 \description{
 Helper functions to compute important statistics from correlation coefficients.

@@ -28,6 +28,9 @@ colSdsMasked(x, mask)
 \item{mask}{A logical matrix determining which data points to include in 
 the column-wise aggregations.}
 }
+\value{
+A numeric vector representing values aggregated by column.
+}
 \description{
 Fast matrix column aggregators
 }

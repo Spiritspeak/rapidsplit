@@ -4,7 +4,7 @@
 \alias{generateSplits}
 \title{A balanced split-half generator}
 \usage{
-generateSplits(data, subsetvars, stratvars = NULL, splits, verbose = T)
+generateSplits(data, subsetvars, stratvars = NULL, splits, verbose = TRUE)
 }
 \arguments{
 \item{data}{A dataset to generate split-halves from.}

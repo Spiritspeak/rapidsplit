@@ -97,6 +97,7 @@ corByColumns_mask <- function(x, y, mask) {
 #' colMedians(x)
 #' 
 #' @seealso \link[base]{colMeans}, \link{mediansByMask}, \link{maskAggregators}
+#' @return A numeric vector representing values aggregated by column.
 #' @export
 colMedians <- function(x) {
     .Call('_rapidsplithalf_colMedians', PACKAGE = 'rapidsplithalf', x)
@@ -192,7 +193,9 @@ colSdsMasked <- function(x, mask) {
 #' # Median for half 1
 #' mediansByMask(currdata$RT,mysplits==1)
 #'  
-#' @seealso \link{colMedians}, \link{colAggregators}
+#' @seealso \link{colMedians}, \link{colAggregators}, \link{generateSplits}
+#' @return a vector with each value representing an aggregate of the same single input vector 
+#' but with different masks or frequency weights applied.
 #' @export
 mediansByMask <- function(x, mask) {
     .Call('_rapidsplithalf_mediansByMask', PACKAGE = 'rapidsplithalf', x, mask)

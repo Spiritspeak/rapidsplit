@@ -26,7 +26,7 @@
 #' half1<-foodAAT[ mysplits[,1],]
 #' half2<-foodAAT[!mysplits[,1],]
 #' 
-generateSplits<-function(data,subsetvars,stratvars=NULL,splits,verbose=T){
+generateSplits<-function(data,subsetvars,stratvars=NULL,splits,verbose=TRUE){
   
   # Arrange properly
   runorder<-do.call(order,data[,c(subsetvars,stratvars),drop=FALSE])
@@ -54,7 +54,7 @@ generateSplits<-function(data,subsetvars,stratvars=NULL,splits,verbose=T){
   return(origkeys[backorder,,drop=FALSE])
 }
 
-applyAggregator<-function(data,subsetvars,aggvar,aggfunc,mask,verbose=T){
+applyAggregator<-function(data,subsetvars,aggvar,aggfunc,mask,verbose=TRUE){
   subsetvec<-do.call(paste,cols2ids(data[,subsetvars,drop=FALSE]))
   runorder<-order(subsetvec)
   subsetvec<-subsetvec[runorder]
@@ -68,13 +68,13 @@ applyAggregator<-function(data,subsetvars,aggvar,aggfunc,mask,verbose=T){
     if(verbose){ setTxtProgressBar(pb,i) }
     aggs[i,]<-
       aggfunc(x=data[[aggvar]][subsetvec==subsets[i]],
-              mask=mask[subsetvec==subsets[i],,drop=F])
+              mask=mask[subsetvec==subsets[i],,drop=FALSE])
   }
   if(verbose){ close(pb) }
   list(indices=unique(data[,subsetvars]),aggs=aggs)
 }
 
-applyAggregator2<-function(data,subsetvars,aggvar,aggfunc,masks,verbose=T){
+applyAggregator2<-function(data,subsetvars,aggvar,aggfunc,masks,verbose=TRUE){
   outputs<-list()
   for(i in seq_along(masks)){
     outputs[[i]]<-applyAggregator(data,subsetvars,aggvar,aggfunc,masks[[i]],verbose)
@@ -84,7 +84,7 @@ applyAggregator2<-function(data,subsetvars,aggvar,aggfunc,masks,verbose=T){
 
 reduceRows<-function(indices,aggs,groupvars,collapsevar,
                      action=c("subtract","add","divide","multiply"),
-                     highlow=T){
+                     highlow=TRUE){
   action<-match.arg(action)
   
   subsetvec<-do.call(paste,indices[,c(groupvars,collapsevar),drop=FALSE])

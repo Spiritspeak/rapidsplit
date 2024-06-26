@@ -9,7 +9,7 @@ cormean(
   n,
   weights = c("none", "n", "df"),
   type = c("OP5", "OP2", "OPK"),
-  na.rm = F
+  na.rm = FALSE
 )
 }
 \arguments{

@@ -31,6 +31,10 @@ to aggregate \code{x} with. Only values marked \code{TRUE} are included in the a
 \item{weights}{Integer matrix where each column represents frequency weights 
 to weight the aggregation by.}
 }
+\value{
+a vector with each value representing an aggregate of the same single input vector 
+but with different masks or frequency weights applied.
+}
 \description{
 Methods to aggregate the same vector with different masks or frequency weights.
 Useful for fast bootstrapping or split-half scoring.
@@ -97,5 +101,5 @@ sd(bootmeans/bootsds)
 
 }
 \seealso{
-\link{colMedians}, \link{colAggregators}
+\link{colMedians}, \link{colAggregators}, \link{generateSplits}
 }
