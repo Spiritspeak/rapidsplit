@@ -8,7 +8,7 @@
 An object of class \code{"data.frame"}.
 }
 \source{
-\href{https://doi.org/10.1016/j.appet.2018.01.032}{Original study}
+\doi{10.1016/j.appet.2018.01.032}
 }
 \usage{
 data(foodAAT)
@@ -39,6 +39,6 @@ Instructions were flipped from one block to the next.
 Lender, A., Meule, A., Rinck, M., Brockmeyer, T., & Blechert, J. (2018).
 Measurement of food-related approach–avoidance biases:
 Larger biases when food stimuli are task relevant. Appetite, 125, 42–47.
-\href{https://doi.org/10.1016/j.appet.2018.01.032}{10.1016/j.appet.2018.01.032}
+\doi{10.1016/j.appet.2018.01.032}
 }
 \keyword{datasets}

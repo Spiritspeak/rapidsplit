@@ -45,6 +45,6 @@ replaced by the block mean plus a penalty.
 Xu, K., Nosek, B., & Greenwald, A. G. (2014).
 Psychology data from the race implicit association test on the project implicit demo website.
 Journal of open psychology data, 2(1), e3-e3.
-\href{https://doi.org/10.5334/jopd.ac}{10.5334/jopd.ac}
+\doi{10.5334/jopd.ac}
 }
 \keyword{datasets}

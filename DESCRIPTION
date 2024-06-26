@@ -1,6 +1,6 @@
 Package: rapidsplithalf
 Type: Package
-Title: A fast split-half reliability algorithm
+Title: A Fast Split-Half Reliability Algorithm
 Version: 0.2
 Date: 2024-06-24
 Author: Sercan Kahveci

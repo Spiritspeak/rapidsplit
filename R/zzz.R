@@ -1,3 +1,4 @@
+#' @title rapidsplithalf package
 #' @name rapidsplithalf
 #' @aliases rapidsplithalf-package
 #' @import Rcpp doParallel foreach

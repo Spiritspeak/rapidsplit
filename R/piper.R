@@ -1,4 +1,31 @@
 
+#' A balanced split-half generator
+#' 
+#' Generates split-half indices that can be stratified by multiple subgroup variables
+#' while guaranteeing near-equal numbers of trials in both halves.
+#'
+#' @param data A dataset to generate split-halves from.
+#' @param subsetvars Variables identifying subgroups that must be individually split 
+#' into equally sized halves, e.g. participant number and experimental condition.
+#' @param stratvars Variables identifying subgroups that are nested within the subsetvars, 
+#' and must be split as fairly as possible, while preserving the equal size of 
+#' the two halves of each subset identified by the subsetvars, e.g. stimulus ID.
+#' @param splits How many splits to generate.
+#' @param verbose Display progress bar?
+#'
+#' @return A logical \code{matrix} in which each row represents a row of the input dataset,
+#' and each column represents a single split. 
+#' @export
+#'
+#' @examples
+#' data(foodAAT)
+#' mysplits<-generateSplits(data=foodAAT,
+#'                          subsetvars=c("subjectid","is_pull","is_target"),
+#'                          stratvars="stimid",
+#'                          splits=1)
+#' half1<-foodAAT[ mysplits[,1],]
+#' half2<-foodAAT[!mysplits[,1],]
+#' 
 generateSplits<-function(data,subsetvars,stratvars=NULL,splits,verbose=T){
   
   # Arrange properly
@@ -24,8 +51,7 @@ generateSplits<-function(data,subsetvars,stratvars=NULL,splits,verbose=T){
   
   # return
   backorder<-order(runorder)
-  list(indices=arr.ds[backorder,c(subsetvars,stratvars)],
-       keys=origkeys[backorder,])
+  return(origkeys[backorder,,drop=FALSE])
 }
 
 applyAggregator<-function(data,subsetvars,aggvar,aggfunc,mask,verbose=T){

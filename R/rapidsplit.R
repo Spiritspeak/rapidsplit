@@ -497,7 +497,7 @@ rapidsplit.chunks<-
     ss<-NULL
     registerDoParallel(cl=cluster,cores=ncores)
     outcomes<-foreach(ss=splitsizes,
-                      .packages=c("rapidsplit"),
+                      .packages=c("rapidsplithalf"),
                       .multicombine=TRUE,
                       .inorder=FALSE) %dopar% {
                                     

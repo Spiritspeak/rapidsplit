@@ -32,9 +32,9 @@
 #' @references Lender, A., Meule, A., Rinck, M., Brockmeyer, T., & Blechert, J. (2018). 
 #' Measurement of food-related approach–avoidance biases: 
 #' Larger biases when food stimuli are task relevant. Appetite, 125, 42–47. 
-#' \href{https://doi.org/10.1016/j.appet.2018.01.032}{10.1016/j.appet.2018.01.032}
+#' \doi{10.1016/j.appet.2018.01.032}
 #' 
-#' @source \href{https://doi.org/10.1016/j.appet.2018.01.032}{Original study}
+#' @source \doi{10.1016/j.appet.2018.01.032}
 #'
 "foodAAT"
 
@@ -78,7 +78,7 @@
 #' @references Xu, K., Nosek, B., & Greenwald, A. G. (2014). 
 #' Psychology data from the race implicit association test on the project implicit demo website. 
 #' Journal of open psychology data, 2(1), e3-e3. 
-#' \href{https://doi.org/10.5334/jopd.ac}{10.5334/jopd.ac}
+#' \doi{10.5334/jopd.ac}
 #' 
 #' @source \href{https://osf.io/y9hiq/}{OSF.io repository}
 #'

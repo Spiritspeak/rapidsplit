@@ -269,7 +269,7 @@ NumericVector mediansByWeight(NumericVector x,IntegerMatrix weights){
      if(is_med){
        meds.push_back(j);
      }
-     if((meds.size()==2) | ((meds.size()==1) & (!is_med))){
+     if((meds.size()==2) || ((meds.size()==1) & (!is_med))){
        break;
      }
      counter=counter+currweights[j];
