@@ -141,14 +141,15 @@ The order of operations (with optional steps between brackets) is:
 \item (Dividing the resulting (sub)score by the SD of the data used to compute that (sub)score)
 \item (Averaging subscores together into a single score per person)
 \item Correlating scores from one half with scores from the other half
-\item Applying the Spearman-Brown correction using \code{\link[=spearmanBrown]{spearmanBrown()}}
 \item Computing the average split-half reliability using \code{\link[=cormean]{cormean()}}
+\item Applying the Spearman-Brown formula to the absolute correlation
+using \code{\link[=spearmanBrown]{spearmanBrown()}}, and restoring the original sign after
 }
 }
 \note{
 \itemize{
 \item This function can use a lot of memory in one go.
-If you're computing the reliability of a large dataset or you have little RAM,
+If you are computing the reliability of a large dataset or you have little RAM,
 it may pay off to use the sequential version of this function instead:
 \code{\link[=rapidsplit.chunks]{rapidsplit.chunks()}}
 \item It is currently unclear it is better to pre-process your data before or after splitting it.

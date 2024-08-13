@@ -52,7 +52,7 @@
 #' 
 #' @note
 #' * This function can use a lot of memory in one go. 
-#' If you're computing the reliability of a large dataset or you have little RAM, 
+#' If you are computing the reliability of a large dataset or you have little RAM, 
 #' it may pay off to use the sequential version of this function instead: 
 #' [rapidsplit.chunks()]
 #' 
@@ -70,8 +70,9 @@
 #' * (Dividing the resulting (sub)score by the SD of the data used to compute that (sub)score)
 #' * (Averaging subscores together into a single score per person)
 #' * Correlating scores from one half with scores from the other half
-#' * Applying the Spearman-Brown correction using [spearmanBrown()]
 #' * Computing the average split-half reliability using [cormean()]
+#' * Applying the Spearman-Brown formula to the absolute correlation 
+#' using [spearmanBrown()], and restoring the original sign after
 #' 
 #' @export
 #'
@@ -324,12 +325,12 @@ rapidsplit<-function(data,subjvar,diffvars=NULL,stratvars=NULL,subscorevar=NULL,
   rownames(antikeyscores)<-origpps[match(rownames(antikeyscores),pps)]
   
   # Get correlations
-  cors<-corByColumns(keyscores,antikeyscores) |> spearmanBrown()
+  cors<-corByColumns(keyscores,antikeyscores)
   sampsize<-length(pps)
   
   # Form output
-  out<-list(r=cormean(cors,sampsize),
-            allcors=cors,
+  out<-list(r=spearmanBrown(cormean(cors,sampsize)),
+            allcors=spearmanBrown(cors),
             nobs=sampsize)
   
   # Add individual split halves if requested

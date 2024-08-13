@@ -59,7 +59,7 @@ rconfint<-function(r,n,alpha=.05){
   z<-r2z(r)
   zint<-qnorm(1-alpha/2) * sqrt(1/(n-3))
   confints<-c(z2r(z-zint),z2r(z+zint))
-  return(rconfint)
+  return(confints)
 }
 
 #' @export
