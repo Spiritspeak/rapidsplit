@@ -22,7 +22,6 @@
 #' defined in \code{aggvar}; can be \code{"means"}, \code{"medians"}, 
 #' or a custom function (not a function name). 
 #' This custom function must take a numeric vector and output a single value.
-#' Only if \code{aggfunc} is set to \code{"custom"}.
 #' @param errorhandling A list with 4 named items, to be used to replace error trials
 #'  with the block mean of correct responses plus a fixed penalty, as in the IAT D-score.
 #'  The 4 items are \code{type} which can be set to \code{"none"} for no error replacement, 
@@ -114,7 +113,7 @@
 #'            standardize=TRUE)
 #' 
 rapidsplit<-function(data,subjvar,diffvars=NULL,stratvars=NULL,subscorevar=NULL,
-                      aggvar,splits,
+                      aggvar,splits=6000,
                       aggfunc=c("means","medians"),
                       errorhandling=list(type=c("none","fixedpenalty"),
                                          errorvar=NULL,fixedpenalty=600,blockvar=NULL),
@@ -442,8 +441,8 @@ plot.rapidsplit<-function(x,type=c("average","minimum","maximum","random","all")
 #' 
 rapidsplit.chunks<-
   function(data,subjvar,diffvars=NULL,stratvars=NULL,subscorevar=NULL,
-           aggvar,splits,
-           aggfunc=c("means","medians","custom"),
+           aggvar,splits=6000,
+           aggfunc=c("means","medians"),
            errorhandling=list(type=c("none","fixedpenalty"),
                               errorvar=NULL,fixedpenalty=600,blockvar=NULL),
            standardize=FALSE,include.scores=TRUE,verbose=TRUE,check=TRUE,
