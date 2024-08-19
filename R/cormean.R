@@ -98,6 +98,7 @@ print.compcorr<-function(x,...){
 #' @param type Character. Determines which averaging algorithm to use, 
 #' with "OP5" usually being the most accurate.
 #' @param na.rm Logical. Should missing values be removed?
+#' @param incl.trans Logical. Should the transformed correlations be included?
 #'
 #' @return An average correlation.
 #' @name cormean
@@ -113,7 +114,7 @@ print.compcorr<-function(x,...){
 #' @examples
 #' cormean(c(0,.3,.5),c(30,30,60))
 #' 
-cormean<-function(r,n,weights=c("none","n","df"),type=c("OP5","OP2","OPK"),na.rm=FALSE){
+cormean<-function(r,n,weights=c("none","n","df"),type=c("OP5","OP2","OPK"),na.rm=FALSE,incl.trans=FALSE){
   type<-match.arg(type)
   weights<-match.arg(weights)
   
@@ -149,16 +150,17 @@ cormean<-function(r,n,weights=c("none","n","df"),type=c("OP5","OP2","OPK"),na.rm
     corlist<-sapply(seq_along(r),
                     function(i){ r[i]*(1+ sum(gammalist[,match(n[i],sizevec)] *
                                                 (1-r[i]^2)^(1:5)/factorialchain))})
-    rmean<-weighted.mean(x= corlist,w= weight)
   }else if(type=="OPK"){
-    rmean<-weighted.mean(x= r*(1+(1-r^2)/(2*(n-(9*sqrt(2)-7)/2))),
-                         w= weight)
+    corlist<-r*(1+(1-r^2)/(2*(n-(9*sqrt(2)-7)/2)))
   }else if(type=="OP2"){
-    rmean<-weighted.mean(x= r*(1+ (1-r^2)/(2*(n-2)) +
-                                 (9*(1-r^2)^2)/(8*n*(n-2))),
-                         w= weight)
+    corlist<-r*(1+(1-r^2)/(2*(n-2))+(9*(1-r^2)^2)/(8*n*(n-2)))
   }
-  return(rmean)
+  rmean<-weighted.mean(x=corlist,w=weight)
+  if(incl.trans){
+    return(list(r=rmean,trans=corlist))
+  }else{
+    return(rmean)
+  }
 }
 
 
