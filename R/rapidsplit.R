@@ -40,6 +40,8 @@
 #' 
 #' * \code{r}: the averaged reliability.
 #' 
+#' * \code{ci}: the 95% confidence intervals.
+#' 
 #' * \code{allcors}: a vector with the reliability of each iteration.
 #' 
 #' * \code{nobs}: the number of participants.
@@ -329,6 +331,7 @@ rapidsplit<-function(data,subjvar,diffvars=NULL,stratvars=NULL,subscorevar=NULL,
   
   # Form output
   out<-list(r=spearmanBrown(cormean(cors,sampsize)),
+            ci=quantile(spearmanBrown(cors),c(.025,.975)),
             allcors=spearmanBrown(cors),
             nobs=sampsize)
   
