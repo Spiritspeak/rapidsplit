@@ -2,7 +2,7 @@
 
 
 #' rapidsplit
-#' @description A very fast algorithm for computing stratified permutated split-half reliability.
+#' @description A very fast algorithm for computing stratified permutation-based split-half reliability.
 #'
 #' @param data Dataset, a \code{data.frame}.
 #' @param subjvar Subject ID variable name, a \code{character}.

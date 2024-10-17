@@ -121,6 +121,7 @@ the chunks are run sequentially.}
 A \code{list} containing
 \itemize{
 \item \code{r}: the averaged reliability.
+\item \code{ci}: the 95\% confidence intervals.
 \item \code{allcors}: a vector with the reliability of each iteration.
 \item \code{nobs}: the number of participants.
 \item \code{scores}: the individual participants scores in each split-half,
@@ -128,7 +129,7 @@ contained in a list with two matrices (Only included if requested with \code{inc
 }
 }
 \description{
-A very fast algorithm for computing stratified permutated split-half reliability.
+A very fast algorithm for computing stratified permutation-based split-half reliability.
 }
 \details{
 The order of operations (with optional steps between brackets) is:
