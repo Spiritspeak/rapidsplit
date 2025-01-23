@@ -3,11 +3,14 @@
 \name{corByColumns}
 \alias{corByColumns}
 \alias{corByColumns_mask}
+\alias{meanCorByColumns}
 \title{Correlate two matrices by column}
 \usage{
 corByColumns(x, y)
 
 corByColumns_mask(x, y, mask)
+
+meanCorByColumns(x, y)
 }
 \arguments{
 \item{x, y}{Matrices whose values to correlate by column.}
@@ -23,6 +26,11 @@ Correlate each column of 1 matrix with the same column in another matrix
 \details{
 The primary use for these functions is to rapidly compute the correlations
 between two sets of split-half scores stored in matrix columns.
+
+\code{meanCorByColumns} produces the mean correlation of all column-pairs
+using the formula \code{mean(covariances) / sqrt(mean(col1variance) * mean(col2variance))}
+
+This method tends to be more accurate than [cormean()].
 }
 \examples{
 m1<-matrix((1:9)+rnorm(9),ncol=3)
@@ -31,5 +39,7 @@ corByColumns(m1,m2)
 
 mask<-1-diag(3)
 corByColumns_mask(m1,m2,mask)
+
+meanCorByColumns(m1,m2)
 
 }

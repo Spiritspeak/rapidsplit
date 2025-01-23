@@ -66,6 +66,12 @@ bootstrapWeights <- function(size, times) {
 #' @details
 #' The primary use for these functions is to rapidly compute the correlations
 #' between two sets of split-half scores stored in matrix columns.
+#' 
+#' \code{meanCorByColumns} produces the mean correlation of all column-pairs
+#' using the formula \code{mean(covariances) / sqrt(mean(col1variance) * mean(col2variance))}
+#' 
+#' This method tends to be more accurate than [cormean()].
+#' 
 #' @export
 #' @examples
 #' m1<-matrix((1:9)+rnorm(9),ncol=3)
@@ -85,6 +91,15 @@ corByColumns <- function(x, y) {
 #' 
 corByColumns_mask <- function(x, y, mask) {
     .Call('_rapidsplithalf_corByColumns_mask', PACKAGE = 'rapidsplithalf', x, y, mask)
+}
+
+#' @rdname corByColumns
+#' @export
+#' @examples
+#' meanCorByColumns(m1,m2)
+#' 
+meanCorByColumns <- function(x, y) {
+    .Call('_rapidsplithalf_meanCorByColumns', PACKAGE = 'rapidsplithalf', x, y)
 }
 
 #' Fast matrix column aggregators
