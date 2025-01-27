@@ -140,11 +140,19 @@ The order of operations (with optional steps between brackets) is:
 \item Subtracting conditions from each other
 \item (Dividing the resulting (sub)score by the SD of the data used to compute that (sub)score)
 \item (Averaging subscores together into a single score per person)
-\item Correlating scores from one half with scores from the other half
-\item Computing the average split-half reliability using \code{\link[=cormean]{cormean()}}
+\item Computing the covariances of scores from one half with scores from the other half
+for every split
+\item Computing the variances of scores within each half for every split
+\item Computing the average split-half correlation with the average variances and covariance
+across all splits, using \code{\link[=corStatsByColumns]{corStatsByColumns()}}
 \item Applying the Spearman-Brown formula to the absolute correlation
 using \code{\link[=spearmanBrown]{spearmanBrown()}}, and restoring the original sign after
 }
+
+\code{\link[=cormean]{cormean()}} was used to aggregate correlations in previous versions
+of this package & in the associated manuscript, but the method based on
+(co)variance averaging was found to be more accurate. This was suggested by
+prof. John Christie of Dalhousie University.
 }
 \note{
 \itemize{
@@ -216,4 +224,13 @@ rapidsplit.chunks(data=foodAAT,
                   aggfunc=trimean,
                   cluster=2)
 
+}
+\references{
+Kahveci, S., Bathke, A.C. & Blechert, J. (2024)
+Reaction-time task reliability is more accurately computed with
+permutation-based split-half correlations than with Cronbach’s alpha.
+Psychonomic Bulletin and Review. \doi{10.3758/s13423-024-02597-y}
+}
+\author{
+Sercan Kahveci
 }

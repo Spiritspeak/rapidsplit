@@ -9,6 +9,7 @@
 #' @param x A \code{compcorr} object to print.
 #' @param ... Ignored.
 #' @seealso \link{cormean}
+#' @author Sercan Kahveci
 #' @return For \code{r2z()}, \code{z2r}, \code{r2t}, \code{t2r}, and \code{r2p}, 
 #' a numeric vector with the requested transformation applied. 
 #' For \code{rconfint()}, a numeric vector with two values representing 
@@ -103,7 +104,7 @@ print.compcorr<-function(x,...){
 #' @return An average correlation.
 #' @name cormean
 #' @export
-#'
+#' 
 #' @references
 #' Olkin, I., & Pratt, J. (1958). Unbiased estimation of certain correlation coefficients.
 #' The Annals of Mathematical Statistics, 29. https://doi.org/10.1214/aoms/1177706717
