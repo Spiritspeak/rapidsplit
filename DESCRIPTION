@@ -6,7 +6,7 @@ Authors@R: person("Sercan", "Kahveci", role = c("aut","cre"),email = "sercan.kah
 Description: Accurately estimates the reliability of cognitive tasks using a fast and flexible permutation-based split-half reliability algorithm that supports stratified splitting while maintaining equal split sizes. See Kahveci, Bathke, and Blechert (2022) <doi:10.31234/osf.io/ta59r> for details.
 License: GPL (>= 2)
 BugReports: https://github.com/Spiritspeak/rapidsplit/issues/
-Depends: R(>= 4.0)
+Depends: R(>= 4.1.0)
 Imports: Rcpp (>= 1.0.5), doParallel, foreach
 Suggests: knitr, rmarkdown
 LinkingTo: Rcpp
