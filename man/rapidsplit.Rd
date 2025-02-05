@@ -124,6 +124,8 @@ A \code{list} containing
 \item \code{ci}: the 95\% confidence intervals.
 \item \code{allcors}: a vector with the reliability of each iteration.
 \item \code{nobs}: the number of participants.
+\item \code{rcomponents}: a list containing the mean variance of the scores of both halves,
+as well as their mean covariance.
 \item \code{scores}: the individual participants scores in each split-half,
 contained in a list with two matrices (Only included if requested with \code{include.scores}).
 }

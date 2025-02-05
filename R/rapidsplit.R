@@ -46,6 +46,9 @@
 #' 
 #' * \code{nobs}: the number of participants.
 #' 
+#' * \code{rcomponents}: a list containing the mean variance of the scores of both halves, 
+#' as well as their mean covariance.
+#' 
 #' * \code{scores}: the individual participants scores in each split-half, 
 #' contained in a list with two matrices (Only included if requested with \code{include.scores}).
 #' 
@@ -346,7 +349,10 @@ rapidsplit<-function(data,subjvar,diffvars=NULL,stratvars=NULL,subscorevar=NULL,
   out<-list(r=spearmanBrown(coraggs$cormean),
             ci=quantile(spearmanBrown(coraggs$allcors),c(.025,.975)),
             allcors=spearmanBrown(coraggs$allcors),
-            nobs=sampsize)
+            nobs=sampsize,
+            rcomponents=list(half1var=coraggs$meanxvar,
+                             half2var=coraggs$meanyvar,
+                             covar=coraggs$meancovar))
   
   # Add individual split halves if requested
   if(include.scores){
@@ -531,14 +537,21 @@ rapidsplit.chunks<-
   output<-list()
   output[["allcors"]]<-unlist(lapply(outcomes,\(x)x[["allcors"]]))
   output[["nobs"]]<-outcomes[[1]][["nobs"]]
-  output[["r"]]<-cormean(output[["allcors"]],output[["nobs"]])
+  half1var<-mean(sapply(outcomes,function(x)x$rcomponents$half1var))
+  half2var<-mean(sapply(outcomes,function(x)x$rcomponents$half2var))
+  covar<-mean(sapply(outcomes,function(x)x$rcomponents$covar))
+  output[["r"]]<-covar/sqrt(half1var*half2var)
+  output[["rcomponents"]]<-list(half1var=half1var,
+                                half2var=half2var,
+                                covar=covar)
+  
   if(include.scores){
     output[["scores"]][["half1"]]<-do.call(cbind,lapply(outcomes,\(x)x[["scores"]][["half1"]]))
     for(i in seq_along(splitsizes)){ outcomes[[i]][["scores"]][["half1"]]<-NULL }
     output[["scores"]][["half2"]]<-do.call(cbind,lapply(outcomes,\(x)x[["scores"]][["half2"]]))
     for(i in seq_along(splitsizes)){ outcomes[[i]][["scores"]][["half2"]]<-NULL }
   }
-  output<-output[c("r","allcors","nobs","scores")]
+  output<-output[c("r","allcors","nobs","rcomponents","scores")]
   
   # Add class
   output<-structure(output,class="rapidsplit")
