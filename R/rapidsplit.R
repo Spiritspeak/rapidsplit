@@ -152,6 +152,7 @@ rapidsplit<-function(data,subjvar,diffvars=NULL,stratvars=NULL,subscorevar=NULL,
   runorder<-do.call(order,data[c(subjvar,subscorevar,errorhandling$blockvar,diffvars,stratvars)])
   arr.ds<- data[runorder,c(subjvar,subscorevar,errorhandling$blockvar,diffvars,stratvars,
                            aggvar,errorhandling$errorvar)]
+  rm(data)
   origpps<-unique(arr.ds[[subjvar]])
   arr.ds[c(subjvar,subscorevar,diffvars,stratvars)]<-
     cols2ids(arr.ds[c(subjvar,subscorevar,diffvars,stratvars)])
@@ -172,15 +173,17 @@ rapidsplit<-function(data,subjvar,diffvars=NULL,stratvars=NULL,subscorevar=NULL,
     cat("Generating splits...\n")
     pb = txtProgressBar(min = 0, max = length(subscores), initial = 0)
   }
+  subscidx<-split(seq_along(arr.ds[[".subscore"]]),arr.ds[[".subscore"]])
   for(ss in subscores){
     if(verbose){ setTxtProgressBar(pb,which(ss==subscores)) }
-    iterds<-arr.ds[arr.ds[[".subscore"]]==ss,c(diffvars,stratvars),drop=FALSE]
+    iterds<-arr.ds[subscidx[[ss]],c(diffvars,stratvars),drop=FALSE]
     iterrle<-rle(do.call(paste,args=iterds))
     grsizes<-iterrle$lengths
     if(length(grsizes)==0){grsizes<-nrow(iterds)}
     keys[[ss]]<-stratifiedItersplits(splits=splits, groupsizes=grsizes)
   }
   antikeys<-lapply(keys,function(x) !x)
+  rm(subscidx)
   if(verbose){close(pb)}
   
   # Generate aggvar matrix and apply error rule
@@ -329,8 +332,8 @@ rapidsplit<-function(data,subjvar,diffvars=NULL,stratvars=NULL,subscorevar=NULL,
     rownames(newkeyscores)<-rownames(newantikeyscores)<-pps
     for(i in seq_along(pps)){
       ss<-unique(arr.ds[[".subscore"]][arr.ds[[subjvar]]==pps[i]])
-      newkeyscores[i,]<-colMeans(keyscores[ss,,drop=F])
-      newantikeyscores[i,]<-colMeans(antikeyscores[ss,,drop=F])
+      newkeyscores[i,]<-colMeans(keyscores[ss,,drop=FALSE])
+      newantikeyscores[i,]<-colMeans(antikeyscores[ss,,drop=FALSE])
     }
     keyscores<-newkeyscores
     antikeyscores<-newantikeyscores
