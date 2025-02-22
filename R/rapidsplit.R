@@ -173,17 +173,15 @@ rapidsplit<-function(data,subjvar,diffvars=NULL,stratvars=NULL,subscorevar=NULL,
     cat("Generating splits...\n")
     pb = txtProgressBar(min = 0, max = length(subscores), initial = 0)
   }
-  subscidx<-split(seq_along(arr.ds[[".subscore"]]),arr.ds[[".subscore"]])
   for(ss in subscores){
     if(verbose){ setTxtProgressBar(pb,which(ss==subscores)) }
-    iterds<-arr.ds[subscidx[[ss]],c(diffvars,stratvars),drop=FALSE]
+    iterds<-subscorelist[[ss]][,c(diffvars,stratvars),drop=FALSE]
     iterrle<-rle(do.call(paste,args=iterds))
     grsizes<-iterrle$lengths
     if(length(grsizes)==0){grsizes<-nrow(iterds)}
     keys[[ss]]<-stratifiedItersplits(splits=splits, groupsizes=grsizes)
   }
   antikeys<-lapply(keys,function(x) !x)
-  rm(subscidx)
   if(verbose){close(pb)}
   
   # Generate aggvar matrix and apply error rule
