@@ -299,7 +299,6 @@ rapidsplit<-function(data,subjvar,diffvars=NULL,stratvars=NULL,subscorevar=NULL,
       antikeyscores[i,]<-
         colSums(antikeymeans[diffidx[[".subscore"]]==subscores[i],,drop=FALSE] * 
                   diffidx[[".valence"]][diffidx[[".subscore"]]==subscores[i]])
-      
     }
   }else{
     keyscores<-keymeans
@@ -330,8 +329,8 @@ rapidsplit<-function(data,subjvar,diffvars=NULL,stratvars=NULL,subscorevar=NULL,
     rownames(newkeyscores)<-rownames(newantikeyscores)<-pps
     for(i in seq_along(pps)){
       ss<-unique(arr.ds[[".subscore"]][arr.ds[[subjvar]]==pps[i]])
-      newkeyscores[i,]<-colMeans(keyscores[ss,])
-      newantikeyscores[i,]<-colMeans(antikeyscores[ss,])
+      newkeyscores[i,]<-colMeans(keyscores[ss,,drop=F])
+      newantikeyscores[i,]<-colMeans(antikeyscores[ss,,drop=F])
     }
     keyscores<-newkeyscores
     antikeyscores<-newantikeyscores
