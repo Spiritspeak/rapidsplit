@@ -176,8 +176,7 @@ rapidsplit<-function(data,subjvar,diffvars=NULL,stratvars=NULL,subscorevar=NULL,
   for(ss in subscores){
     if(verbose){ setTxtProgressBar(pb,which(ss==subscores)) }
     iterds<-subscorelist[[ss]][,c(diffvars,stratvars),drop=FALSE]
-    iterrle<-rle(do.call(paste,args=iterds))
-    grsizes<-iterrle$lengths
+    grsizes<-runlengths(do.call(paste,args=iterds))
     if(length(grsizes)==0){grsizes<-nrow(iterds)}
     keys[[ss]]<-stratifiedItersplits(splits=splits, groupsizes=grsizes)
   }

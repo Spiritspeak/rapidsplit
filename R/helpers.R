@@ -8,6 +8,14 @@ mf<-function(x,digits=2){
   return(s)
 }
 
+runlengths <- function (x) {
+  n <- length(x)
+  if (n == 0L) return(integer())
+  y <- x[-1L] != x[-n]
+  i <- c(which(y), n)
+  return(diff(c(0L, i)))
+}
+
 cols2ids<-function(df){
   for(col in seq_along(df)){
     df[,col]<-as.numeric(as.factor(df[[col]]))
