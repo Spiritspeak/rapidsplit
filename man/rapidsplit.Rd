@@ -48,8 +48,8 @@ rapidsplit.chunks(
   include.scores = TRUE,
   verbose = TRUE,
   check = TRUE,
-  chunks = 4,
-  cluster = NULL
+  split.chunksize = Inf,
+  sample.chunksize = Inf
 )
 }
 \arguments{
@@ -110,12 +110,8 @@ the \code{"minimum"} or \code{"maximum"} split-half correlation, or any \code{"r
 \item{show.labels}{Should participant IDs be shown above their points in the scatterplot?
 Defaults to \code{TRUE} and is ignored when \code{type} is \code{"all"}.}
 
-\item{chunks}{Number of chunks to divide the splits in, for more memory-efficient computation,
-and to divide over multiple cores if requested.}
-
-\item{cluster}{Chunks will be run on separate cores if a cluster is provided, 
-or an \code{integer} specifying the number of cores. Otherwise, if the value is \code{NULL},
-the chunks are run sequentially.}
+\item{split.chunksize, sample.chunksize}{Number of chunks to divide the splits and sample in 
+for more memory-efficient computation. This has no bearing on the result.}
 }
 \value{
 A \code{list} containing
@@ -158,10 +154,9 @@ prof. John Christie of Dalhousie University.
 }
 \note{
 \itemize{
-\item This function can use a lot of memory in one go.
+\item \code{\link[=rapidsplit]{rapidsplit()}} function can use a lot of memory in one go.
 If you are computing the reliability of a large dataset or you have little RAM,
-it may pay off to use the sequential version of this function instead:
-\code{\link[=rapidsplit.chunks]{rapidsplit.chunks()}}
+it may pay off to use \code{\link[=rapidsplit.chunks]{rapidsplit.chunks()}} instead.
 \item It is currently unclear it is better to pre-process your data before or after splitting it.
 If you are computing the IAT D-score,
 you can therefore use \code{errorhandling} and \code{standardize} to perform these two actions
@@ -205,26 +200,28 @@ rapidsplit(data=raceIAT,
            splits=100,
            standardize=TRUE)
 
-
 # Unstratified reliability of the median RT
-rapidsplit.chunks(data=foodAAT,
-                  subjvar="subjectid",
-                  aggvar="RT",
-                  splits=100,
+# computed in chunks of 20 participants at a time
+# to handle large samples
+rapidsplit.chunks(data=raceIAT,
+                  subjvar="session_id",
+                  aggvar="latency",
+                  splits=200,
                   aggfunc="medians",
-                  chunks=8)
+                  sample.chunksize=10)
 
 # Compute the reliability of Tukey's trimean of the RT
-# on 2 CPU cores
+# in subsets of 100 splits and 20 participants per run
 trimean<-function(x){ 
   sum(quantile(x,c(.25,.5,.75))*c(1,2,1))/4
 }
 rapidsplit.chunks(data=foodAAT,
                   subjvar="subjectid",
                   aggvar="RT",
-                  splits=200,
+                  splits=400,
                   aggfunc=trimean,
-                  cluster=2)
+                  split.chunksize=150,
+                  sample.chunksize=20)
 
 }
 \references{
