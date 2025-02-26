@@ -48,8 +48,8 @@ rapidsplit.chunks(
   include.scores = TRUE,
   verbose = TRUE,
   check = TRUE,
-  split.chunksize = Inf,
-  sample.chunksize = Inf
+  split.chunksize = 10000,
+  sample.chunksize = 200
 )
 }
 \arguments{

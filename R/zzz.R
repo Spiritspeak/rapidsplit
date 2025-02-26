@@ -10,7 +10,7 @@
 #' @importFrom doParallel registerDoParallel
 #' @importFrom parallel makeCluster stopCluster detectCores
 #' @importFrom foreach foreach %dopar%
-#' @importFrom fastmatch %fin% fmatch
+#' @importFrom fastmatch fmatch %fin%
 #' @author Sercan Kahveci
 #' @description
 #' To learn more about rapidsplithalf, view the introductory vignette:
