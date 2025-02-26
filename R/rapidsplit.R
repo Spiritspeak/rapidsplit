@@ -336,8 +336,8 @@ rapidsplit<-function(data,subjvar,diffvars=NULL,stratvars=NULL,subscorevar=NULL,
   }
   
   # Rename matrix rows to fit names in dataset
-  rownames(keyscores)<-origpps[match(rownames(keyscores),pps)]
-  rownames(antikeyscores)<-origpps[match(rownames(antikeyscores),pps)]
+  rownames(keyscores)<-origpps[fmatch(rownames(keyscores),pps)]
+  rownames(antikeyscores)<-origpps[fmatch(rownames(antikeyscores),pps)]
   
   # Get correlations
   coraggs<-corStatsByColumns(keyscores,antikeyscores)
@@ -465,7 +465,7 @@ rapidsplit.chunks <-
            errorhandling=list(type=c("none","fixedpenalty"),
                               errorvar=NULL,fixedpenalty=600,blockvar=NULL),
            standardize=FALSE,include.scores=TRUE,verbose=TRUE,check=TRUE,
-           split.chunksize=Inf,sample.chunksize=Inf){
+           split.chunksize=10000,sample.chunksize=200){
     
     # process errorhandling object
     errorhandling <- checkerrorhandling(errorhandling)
@@ -539,12 +539,13 @@ rapidsplit.chunks <-
     
     # Merge content
     output <- list()
-    output[["allcors"]] <- unlist(lapply(outcomes,\(x){ x$corstats$allcors }))
+    output[["allcors"]] <- spearmanBrown(unlist(lapply(outcomes,\(x){ x$corstats$allcors })))
+    output[["ci"]] <- quantile(output[["allcors"]],c(.025,.975))
     half1var <- mean(unlist(lapply(outcomes,\(x){ x$corstats$xvar })))
     half2var <- mean(unlist(lapply(outcomes,\(x){ x$corstats$yvar })))
     covar <- mean(unlist(lapply(outcomes,\(x){ x$corstats$covar })))
     output[["nobs"]] <- length(allpps)
-    output[["r"]] <- covar/sqrt(half1var*half2var)
+    output[["r"]] <- spearmanBrown(covar/sqrt(half1var*half2var))
     output[["rcomponents"]] <- list(half1var=half1var,
                                     half2var=half2var,
                                     covar=covar)
@@ -555,7 +556,7 @@ rapidsplit.chunks <-
       output[["scores"]][["half2"]]<-do.call(cbind,lapply(outcomes,\(x)x[["scores"]][["half2"]]))
       for(i in seq_along(outcomes)){ outcomes[[i]][["scores"]][["half2"]]<-NULL }
     }
-    output<-output[c("r","allcors","nobs","rcomponents","scores")]
+    output<-output[c("r","ci","allcors","nobs","rcomponents","scores")]
     
     # Add class
     output<-structure(output,class="rapidsplit")

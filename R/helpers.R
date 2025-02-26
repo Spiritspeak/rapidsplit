@@ -83,7 +83,7 @@ datachecker<-function(data,subjvar,diffvars,stratvars,subscorevar,aggvar,
   }
   
   if(!all(c(subjvar,diffvars,stratvars,subscorevar,aggvar,
-            errorhandling$blockvar,errorhandling$errorvar) %in% names(data))){
+            errorhandling$blockvar,errorhandling$errorvar) %fin% names(data))){
     stop("Not all specified columns present in data.")
   }
   if(length(intersect(diffvars,stratvars))>0){
@@ -127,9 +127,9 @@ datachecker<-function(data,subjvar,diffvars,stratvars,subscorevar,aggvar,
     smallconds<-names(condcounts[condcounts<2])
     if(!all(condcounts>=2)){
       stop("Insufficient data (<2 obs) in 1 or more conditions belonging to these participants: ",
-           paste0(unique(paste0(data[[subjvar]][condpaste %in% smallconds],
+           paste0(unique(paste0(data[[subjvar]][condpaste %fin% smallconds],
                                 " within subscore ",
-                                data[[subscorevar]][condpaste %in% smallconds])),
+                                data[[subscorevar]][condpaste %fin% smallconds])),
                   collapse=", "))
     }
     datapersubject<-table(do.call(paste,data[,c(subjvar,subscorevar),drop=FALSE]))
@@ -144,8 +144,8 @@ datachecker<-function(data,subjvar,diffvars,stratvars,subscorevar,aggvar,
       if(any(nuniques==1)){
         stop("Cannot compute the SD of every participant/subscore, ",
              "due to less than 2 unique values in these participants/subscores: ",
-             paste0(unique(paste0("participant ",data[[subjvar]][indices %in% toofew],
-                                  " within subscore ",data[[subscorevar]][indices %in% toofew])),
+             paste0(unique(paste0("participant ",data[[subjvar]][indices %fin% toofew],
+                                  " within subscore ",data[[subscorevar]][indices %fin% toofew])),
                     collapse=", "))
       }
     }
@@ -161,7 +161,7 @@ datachecker<-function(data,subjvar,diffvars,stratvars,subscorevar,aggvar,
     smallconds<-names(condcounts[condcounts<2])
     if(!all(condcounts>=2)){
       stop("Insufficient data (<2 obs) in 1 or more conditions belonging to these participants: ",
-           paste(unique(data[[subjvar]][condpaste %in% smallconds]),collapse=", "))
+           paste(unique(data[[subjvar]][condpaste %fin% smallconds]),collapse=", "))
     }
     datapersubject<-table(data[[subjvar]])
     if(standardize & !all(datapersubject>=4)){
