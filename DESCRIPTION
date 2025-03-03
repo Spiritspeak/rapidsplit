@@ -1,7 +1,7 @@
 Package: rapidsplithalf
 Type: Package
 Title: A Fast Permutation-Based Split-Half Reliability Algorithm
-Version: 0.4
+Version: 0.5
 Authors@R: person("Sercan", "Kahveci", role = c("aut","cre"),email = "sercan.kahveci@plus.ac.at",comment=c(ORCID = "0000-0002-4139-5710"))
 Description: Accurately estimates the reliability of cognitive tasks using a fast and flexible permutation-based split-half reliability algorithm that supports stratified splitting while maintaining equal split sizes. See Kahveci, Bathke, and Blechert (2022) <doi:10.31234/osf.io/ta59r> for details.
 License: GPL (>= 2)
