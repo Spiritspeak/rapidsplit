@@ -119,7 +119,7 @@ datachecker<-function(data,subjvar,diffvars,stratvars,subscorevar,aggvar,
   }
   
   if(length(subscorevar)>0){
-    condpairs<-funique(data[,c(subjvar,subscorevar,diffvars)])
+    condpairs<-funique(data[,c(subjvar,subscorevar,diffvars),drop=FALSE])
     subscoresubvalues<-countOccur(condpairs[,c(subjvar,subscorevar),drop=FALSE])
     smallsubscores<-subscoresubvalues$Count!=2^length(diffvars)
     if(any(smallsubscores)){
@@ -163,7 +163,7 @@ datachecker<-function(data,subjvar,diffvars,stratvars,subscorevar,aggvar,
       }
     }
   }else{
-    condpairs<-funique(data[,c(subjvar,diffvars)])
+    condpairs<-funique(data[,c(subjvar,diffvars),drop=FALSE])
     subscoresubvalues<-countOccur(condpairs[[subjvar]])
     smallsubscores<-subscoresubvalues$Count!=2^length(diffvars)
     if(any(smallsubscores)){
