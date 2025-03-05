@@ -152,17 +152,17 @@ rapidsplit<-function(data,subjvar,diffvars=NULL,stratvars=NULL,subscorevar=NULL,
   arr.ds<- data[runorder,c(subjvar,subscorevar,errorhandling$blockvar,diffvars,stratvars,
                            aggvar,errorhandling$errorvar)]
   rm(data)
-  origpps<-unique(arr.ds[[subjvar]])
+  origpps<-funique(arr.ds[[subjvar]])
   arr.ds[c(subjvar,subscorevar,diffvars,stratvars)]<-
     cols2ids(arr.ds[c(subjvar,subscorevar,diffvars,stratvars)])
   
   # Create indices
   arr.ds[[".diffidx"]]<-do.call(paste,arr.ds[,c(subjvar,subscorevar,diffvars),drop=FALSE])
   arr.ds[[".subscore"]]<-do.call(paste,arr.ds[,c(subjvar,subscorevar),drop=FALSE])
-  subscores<-unique(arr.ds[[".subscore"]])
-  pps<-unique(arr.ds[[subjvar]])
+  subscores<-funique(arr.ds[[".subscore"]])
+  pps<-funique(arr.ds[[subjvar]])
   
-  diffidx<-unique(arr.ds[,c(subjvar,subscorevar,diffvars,".subscore",".diffidx"),drop=FALSE])
+  diffidx<-funique(arr.ds[,c(subjvar,subscorevar,diffvars,".subscore",".diffidx"),drop=FALSE])
   subscorelist<-split(arr.ds,arr.ds[[".subscore"]])
   difflist<-split(arr.ds,arr.ds[[".diffidx"]])
   
@@ -187,7 +187,7 @@ rapidsplit<-function(data,subjvar,diffvars=NULL,stratvars=NULL,subscorevar=NULL,
     aggdim<-"matrix"
     arr.ds[[".blockidx"]]<-
       do.call(paste,arr.ds[,c(subjvar,subscorevar,errorhandling$blockvar),drop=FALSE])
-    blockidx<-unique(arr.ds[[".blockidx"]])
+    blockidx<-funique(arr.ds[[".blockidx"]])
     aggmats<-split(x=arr.ds[[aggvar]],f=arr.ds[[".blockidx"]])[blockidx] |> 
       lapply(function(x){ matrix(x,nrow=length(x),ncol=splits)})
     
@@ -327,7 +327,7 @@ rapidsplit<-function(data,subjvar,diffvars=NULL,stratvars=NULL,subscorevar=NULL,
     newkeyscores<-newantikeyscores<-matrix(ncol=splits,nrow=length(pps))
     rownames(newkeyscores)<-rownames(newantikeyscores)<-pps
     for(i in seq_along(pps)){
-      ss<-unique(arr.ds[[".subscore"]][arr.ds[[subjvar]]==pps[i]])
+      ss<-funique(arr.ds[[".subscore"]][arr.ds[[subjvar]]==pps[i]])
       newkeyscores[i,]<-colMeans(keyscores[ss,,drop=FALSE])
       newantikeyscores[i,]<-colMeans(antikeyscores[ss,,drop=FALSE])
     }
@@ -484,7 +484,7 @@ rapidsplit.chunks <-
     # Get split counts
     split.chunks <- c(rep(split.chunksize,times=floor(splits/split.chunksize)),
                       splits %% split.chunksize)
-    allpps <- unique(data[[subjvar]])
+    allpps <- funique(data[[subjvar]])
     sample.chunksizes <- c(rep(sample.chunksize,times=floor(length(allpps)/sample.chunksize)),
                            length(allpps) %% sample.chunksize)
     if(sample.chunksizes[length(sample.chunksizes)]==1){

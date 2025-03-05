@@ -11,6 +11,7 @@
 #' @importFrom parallel makeCluster stopCluster detectCores
 #' @importFrom foreach foreach %dopar%
 #' @importFrom fastmatch fmatch %fin%
+#' @importFrom kit funique countOccur
 #' @author Sercan Kahveci
 #' @description
 #' To learn more about rapidsplithalf, view the introductory vignette:

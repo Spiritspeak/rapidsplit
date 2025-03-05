@@ -7,7 +7,7 @@ Description: Accurately estimates the reliability of cognitive tasks using a fas
 License: GPL (>= 2)
 BugReports: https://github.com/Spiritspeak/rapidsplit/issues/
 Depends: R(>= 4.1.0)
-Imports: Rcpp (>= 1.0.5), doParallel, foreach, fastmatch
+Imports: Rcpp (>= 1.0.5), doParallel, foreach, fastmatch, kit
 Suggests: knitr, rmarkdown
 LinkingTo: Rcpp
 RoxygenNote: 7.3.2
