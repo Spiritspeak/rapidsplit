@@ -563,4 +563,4 @@ rapidsplit.chunks <-
     
     # Return
     return(output)
-  }
+}

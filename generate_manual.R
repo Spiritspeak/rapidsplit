@@ -26,3 +26,4 @@ remotes::install_local("./../rapidsplithalf_0.4.tar.gz")
 # browseVignettes("rapidsplithalf")
 # vignette("rapidsplithalf")
 
+
