@@ -178,7 +178,7 @@ frel<-rapidsplit(data=foodAAT,
                  
 print(frel)
 
-plot(frel,type="all")
+plot(frel)
 
            
 # Compute a single random split-half reliability of the error rate
