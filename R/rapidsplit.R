@@ -107,7 +107,7 @@
 #'                  
 #' print(frel)
 #' 
-#' plot(frel)
+#' plot(frel,type="average")
 #' 
 #'            
 #' # Compute a single random split-half reliability of the error rate
@@ -126,7 +126,7 @@
 #'            aggvar="latency",
 #'            errorhandling=list(type="fixedpenalty",errorvar="error",
 #'                               fixedpenalty=600,blockvar="block_number"),
-#'            splits=100,
+#'            splits=10,
 #'            standardize=TRUE)
 #' 
 rapidsplit<-function(data,subjvar,diffvars=NULL,stratvars=NULL,subscorevar=NULL,
@@ -163,8 +163,8 @@ rapidsplit<-function(data,subjvar,diffvars=NULL,stratvars=NULL,subscorevar=NULL,
   pps<-funique(arr.ds[[subjvar]])
   
   diffidx<-funique(arr.ds[,c(subjvar,subscorevar,diffvars,".subscore",".diffidx"),drop=FALSE])
-  subscorelist<-split(arr.ds,arr.ds[[".subscore"]])
-  difflist<-split(arr.ds,arr.ds[[".diffidx"]])
+  subscorelist<-split(arr.ds,arr.ds[[".subscore"]])[subscores]
+  difflist<-split(arr.ds,arr.ds[[".diffidx"]])[funique(diffidx[[".diffidx"]])]
   
   # Compute splithalf masks by subscore
   keys<-setNames(vector(mode="list",length=length(subscores)),subscores)

@@ -178,7 +178,7 @@ frel<-rapidsplit(data=foodAAT,
                  
 print(frel)
 
-plot(frel)
+plot(frel,type="average")
 
            
 # Compute a single random split-half reliability of the error rate
@@ -197,7 +197,7 @@ rapidsplit(data=raceIAT,
            aggvar="latency",
            errorhandling=list(type="fixedpenalty",errorvar="error",
                               fixedpenalty=600,blockvar="block_number"),
-           splits=100,
+           splits=10,
            standardize=TRUE)
 
 # Unstratified reliability of the median RT
