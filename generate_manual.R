@@ -21,7 +21,7 @@ tools::buildVignettes(dir = ".", tangle=TRUE)
 dir.create("./inst/doc")
 file.copy(dir("vignettes", full.names=TRUE), "inst/doc", overwrite=TRUE)
 
-remotes::install_local("./../rapidsplithalf_0.5.tar.gz")
+remotes::install_local("./../rapidsplithalf_0.6.tar.gz")
 
 # browseVignettes("rapidsplithalf")
 # vignette("rapidsplithalf")
