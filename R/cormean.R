@@ -17,6 +17,8 @@
 #' For \code{compcorr()}, a \code{compcorr} object containing
 #' a z and p value for the requested comparison, 
 #' which can be printed with \code{print.compcorr()}.
+#' @note \code{compcorr()} should not be used to compare permutation-based reliabilities.
+#' In that context, it has an excessive type-1 error. Use [comprel()] instead.
 #' @examples
 #' z <- r2z(.5)
 #' r <- z2r(z)
@@ -84,6 +86,54 @@ print.compcorr<-function(x,...){
       "\nZ =",x$zscore,"\np =",x$pvalue,"\n")
 }
 
+#' Compare split-half reliabilities
+#'
+#' @param x,y Split-half reliabilities given by [rapidsplithalf()]
+#' @param alternative The type of test to perform: "two.sided", 
+#' "less" (x < y), or "greater" (x > y).
+#'
+#' @returns The p-value for the difference.
+#' @details
+#' This simply computes the percentage of individual split-half correlations in \code{x}
+#' that are smaller than the individual split-half correlations in \code{y}.
+#' 
+#' @md
+#' @author Sercan Kahveci
+#' @export
+#'
+#' @examples
+#' 
+#' # Here we will demonstrate that the reliability of the practice trials in the IAT
+#' # is higher than the reliability of the non-practice trials.
+#' data(raceIAT)
+#' rel1 <- rapidsplit(data=raceIAT[raceIAT$blocktype=="practice",],
+#'                    subjvar="session_id",diffvars="congruent",
+#'                    subscorevar="blocktype",aggvar="latency",splits=1000,standardize=TRUE)
+#'                    
+#' rel2 <- rapidsplit(data=raceIAT[raceIAT$blocktype=="full",],
+#'                    subjvar="session_id",diffvars="congruent",
+#'                    subscorevar="blocktype",aggvar="latency",splits=1000,standardize=TRUE)
+#' comprel(rel1,rel2,alternative="greater")
+#' 
+comprel <- function(x,y,alternative=c("two.sided","less","greater")){
+  if(class(x)!="rapidsplit" | class(y)!="rapidsplit"){
+    stop("Must supply rapidsplit objects to x and y")
+  }
+  minlength <- min(length(x$allcors),length(y$allcors))
+  if(minlength<1000){
+    warning("Insufficient split-half iterations in x and/or y")
+  }
+  alternative<-match.arg(alternative)
+  if(alternative=="two.sided"){
+    min(mean(x$allcors[1:minlength] > y$allcors[1:minlength]),
+        mean(x$allcors[1:minlength] < y$allcors[1:minlength]))*2
+  }else if(alternative=="greater"){
+    mean(x$allcors[1:minlength] > y$allcors[1:minlength])
+  }else if(alternative=="less"){
+    mean(x$allcors[1:minlength] < y$allcors[1:minlength])
+  }
+}
+
 #' Compute a minimally biased average of correlation values
 #'
 #' This function computes a minimally biased average of correlation values.
@@ -115,7 +165,9 @@ print.compcorr<-function(x,...){
 #' @examples
 #' cormean(c(0,.3,.5),c(30,30,60))
 #' 
-cormean<-function(r,n,weights=c("none","n","df"),type=c("OP5","OP2","OPK"),na.rm=FALSE,incl.trans=FALSE){
+cormean<-function(r,n,weights=c("none","n","df"),
+                  type=c("OP5","OP2","OPK"),
+                  na.rm=FALSE,incl.trans=FALSE){
   type<-match.arg(type)
   weights<-match.arg(weights)
   
