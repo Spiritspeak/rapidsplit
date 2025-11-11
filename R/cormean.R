@@ -94,8 +94,12 @@ print.compcorr<-function(x,...){
 #'
 #' @returns The p-value for the difference.
 #' @details
-#' This simply computes the percentage of individual split-half correlations in \code{x}
-#' that are smaller than the individual split-half correlations in \code{y}.
+#' For each split-half correlation in \code{x},
+#' this computes the percentage of individual split-half correlations in \code{y}
+#' that are smaller; these percentages are then averaged and modified in accordance 
+#' with the test requested in \code{alternative} to give the p-value.
+#' 
+#' @note A large number of splits (>10,000) is recommended to get an accurate p-value.
 #' 
 #' @md
 #' @author Sercan Kahveci
@@ -124,13 +128,15 @@ comprel <- function(x,y,alternative=c("two.sided","less","greater")){
     warning("Insufficient split-half iterations in x and/or y")
   }
   alternative<-match.arg(alternative)
+  xvec <- x$allcors[1:minlength]
+  yvec <- y$allcors[1:minlength]
+  fulldiff <- mean(sapply(xvec,\(z){mean(yvec<z)}))
   if(alternative=="two.sided"){
-    min(mean(x$allcors[1:minlength] > y$allcors[1:minlength]),
-        mean(x$allcors[1:minlength] < y$allcors[1:minlength]))*2
+    min(fulldiff,1-fulldiff)*2
   }else if(alternative=="greater"){
-    mean(x$allcors[1:minlength] > y$allcors[1:minlength])
+    mean(fulldiff)
   }else if(alternative=="less"){
-    mean(x$allcors[1:minlength] < y$allcors[1:minlength])
+    mean(1-fulldiff)
   }
 }
 
