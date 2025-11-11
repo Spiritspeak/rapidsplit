@@ -88,7 +88,8 @@ print.compcorr<-function(x,...){
 
 #' Compare split-half reliabilities
 #'
-#' @param x,y Split-half reliabilities given by [rapidsplithalf()]
+#' @param x,y Either \code{rapidsplit} objects outputted by [rapidsplithalf()], or 
+#' raw vectors or permutation-based split-half reliabilities.
 #' @param alternative The type of test to perform: "two.sided", 
 #' "less" (x < y), or "greater" (x > y).
 #'
@@ -120,23 +121,21 @@ print.compcorr<-function(x,...){
 #' comprel(rel1,rel2,alternative="greater")
 #' 
 comprel <- function(x,y,alternative=c("two.sided","less","greater")){
-  if(class(x)!="rapidsplit" | class(y)!="rapidsplit"){
-    stop("Must supply rapidsplit objects to x and y")
-  }
-  minlength <- min(length(x$allcors),length(y$allcors))
+  if(class(x)=="rapidsplit"){ x <- x$allcors }
+  if(class(y)=="rapidsplit"){ y <- y$allcors }
+  minlength <- min(length(x),length(y))
   if(minlength<1000){
-    warning("Insufficient split-half iterations in x and/or y")
+    warning("Insufficient split-half iterations in x and/or y.")
   }
   alternative<-match.arg(alternative)
-  xvec <- x$allcors[1:minlength]
-  yvec <- y$allcors[1:minlength]
-  fulldiff <- mean(sapply(xvec,\(z){mean(yvec<z)}))
+  
+  fulldiff <- mean(sapply(x,\(z){mean(y<z)}))
   if(alternative=="two.sided"){
     min(fulldiff,1-fulldiff)*2
   }else if(alternative=="greater"){
-    mean(fulldiff)
+    fulldiff
   }else if(alternative=="less"){
-    mean(1-fulldiff)
+    1-fulldiff
   }
 }
 
