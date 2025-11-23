@@ -10,11 +10,11 @@
 rapidsplit(
   data,
   subjvar,
+  aggvar,
   diffvars = NULL,
   stratvars = NULL,
   subscorevar = NULL,
-  aggvar,
-  splits = 6000,
+  splits = 6000L,
   aggfunc = c("means", "medians"),
   errorhandling = list(type = c("none", "fixedpenalty"), errorvar = NULL, fixedpenalty =
     600, blockvar = NULL),
@@ -36,11 +36,11 @@ rapidsplit(
 rapidsplit.chunks(
   data,
   subjvar,
+  aggvar,
   diffvars = NULL,
   stratvars = NULL,
   subscorevar = NULL,
-  aggvar,
-  splits = 6000,
+  splits = 6000L,
   aggfunc = c("means", "medians"),
   errorhandling = list(type = c("none", "fixedpenalty"), errorvar = NULL, fixedpenalty =
     600, blockvar = NULL),
@@ -48,14 +48,17 @@ rapidsplit.chunks(
   include.scores = TRUE,
   verbose = TRUE,
   check = TRUE,
-  split.chunksize = 10000,
-  sample.chunksize = 200
+  split.chunksize = 10000L,
+  sample.chunksize = 200L
 )
 }
 \arguments{
 \item{data}{Dataset, a \code{data.frame}.}
 
 \item{subjvar}{Subject ID variable name, a \code{character}.}
+
+\item{aggvar}{Name of variable whose values to aggregate, a \code{character}.
+Examples include reaction times and error rates.}
 
 \item{diffvars}{Names of variables that determine which conditions
 need to be subtracted from each other, \code{character}.}
@@ -67,9 +70,6 @@ be stratified by; a \code{character}.}
 a participant's data from which separate scores should be computed.
 To compute a participant's final score, these subscores will be averaged together.
 A typical use case is the D-score of the implicit association task.}
-
-\item{aggvar}{Name of variable whose values to aggregate, a \code{character}.
-Examples include reaction times and error rates.}
 
 \item{splits}{Number of split-halves to average, an \code{integer}.
 It is recommended to use around 5000.}
@@ -105,7 +105,8 @@ will be based on the unpenalized SD of correct and incorrect trials, as in the I
 By default, this plots the random split whose correlation is closest to the average.
 However, this can also plot the random split with 
 the \code{"minimum"} or \code{"maximum"} split-half correlation, or any \code{"random"} split. 
-\code{"all"} splits can also be plotted together in one figure.}
+\code{"all"} splits can also be plotted together in one figure, while
+\code{"many"} implies 1000 splits (or less, in case less than 1000 were computed).}
 
 \item{show.labels}{Should participant IDs be shown above their points in the scatterplot?
 Defaults to \code{TRUE} and is ignored when \code{type} is \code{"all"}.}

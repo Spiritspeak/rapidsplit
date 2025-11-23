@@ -6,6 +6,8 @@
 #'
 #' @param data Dataset, a \code{data.frame}.
 #' @param subjvar Subject ID variable name, a \code{character}.
+#' @param aggvar Name of variable whose values to aggregate, a \code{character}.
+#' Examples include reaction times and error rates.
 #' @param diffvars Names of variables that determine which conditions 
 #' need to be subtracted from each other, \code{character}.
 #' @param stratvars Additional variables that the splits should 
@@ -14,8 +16,6 @@
 #' a participant's data from which separate scores should be computed. 
 #' To compute a participant's final score, these subscores will be averaged together. 
 #' A typical use case is the D-score of the implicit association task.
-#' @param aggvar Name of variable whose values to aggregate, a \code{character}.
-#' Examples include reaction times and error rates.
 #' @param splits Number of split-halves to average, an \code{integer}. 
 #' It is recommended to use around 5000.
 #' @param aggfunc The function by which to aggregate the variable 
@@ -129,8 +129,8 @@
 #'            splits=10,
 #'            standardize=TRUE)
 #' 
-rapidsplit<-function(data,subjvar,diffvars=NULL,stratvars=NULL,subscorevar=NULL,
-                      aggvar,splits=6000,
+rapidsplit<-function(data,subjvar,aggvar,diffvars=NULL,stratvars=NULL,subscorevar=NULL,
+                      splits=6000L,
                       aggfunc=c("means","medians"),
                       errorhandling=list(type=c("none","fixedpenalty"),
                                          errorvar=NULL,fixedpenalty=600,blockvar=NULL),
@@ -170,13 +170,13 @@ rapidsplit<-function(data,subjvar,diffvars=NULL,stratvars=NULL,subscorevar=NULL,
   keys<-setNames(vector(mode="list",length=length(subscores)),subscores)
   if(verbose){
     cat("Generating splits...\n")
-    pb = txtProgressBar(min = 0, max = length(subscores), initial = 0)
+    pb <- txtProgressBar(min = 0L, max = length(subscores), initial = 0L)
   }
   for(ss in subscores){
     if(verbose){ setTxtProgressBar(pb,which(ss==subscores)) }
     iterds<-subscorelist[[ss]][,c(diffvars,stratvars),drop=FALSE]
     grsizes<-runlengths(do.call(paste,args=iterds))
-    if(length(grsizes)==0){grsizes<-nrow(iterds)}
+    if(length(grsizes)==0L){grsizes<-nrow(iterds)}
     keys[[ss]]<-stratifiedItersplits(splits=splits, groupsizes=grsizes)
   }
   antikeys<-lapply(keys,function(x) !x)
@@ -194,13 +194,13 @@ rapidsplit<-function(data,subjvar,diffvars=NULL,stratvars=NULL,subscorevar=NULL,
     # Apply error rule
     if(verbose){
       cat("Replacing error trials\n")
-      pb = txtProgressBar(min = 0, max = length(blockidx), initial = 0)
+      pb <- txtProgressBar(min = 0L, max = length(blockidx), initial = 0L)
     }
     for(i in seq_along(blockidx)){
       if(verbose){ setTxtProgressBar(pb,i) }
       
       # get mask
-      ss<-arr.ds[[".subscore"]][arr.ds[[".blockidx"]]==blockidx[i]][1]
+      ss<-arr.ds[[".subscore"]][arr.ds[[".blockidx"]]==blockidx[i]][1L]
       maskkey<-arr.ds[arr.ds[[".subscore"]]==ss,".blockidx"]==blockidx[i]
       errorvec<-as.logical(arr.ds[[errorhandling$errorvar]][arr.ds[[".blockidx"]]==blockidx[i]])
       
@@ -256,12 +256,12 @@ rapidsplit<-function(data,subjvar,diffvars=NULL,stratvars=NULL,subscorevar=NULL,
   keymeans<-antikeymeans<-matrix(ncol=splits,nrow=length(difflist))
   if(verbose){
     cat("Aggregating conditions...\n")
-    pb = txtProgressBar(min = 0, max = length(difflist), initial = 0) 
+    pb <- txtProgressBar(min = 0L, max = length(difflist), initial = 0L) 
   }
   rownames(keymeans)<-rownames(antikeymeans)<-names(difflist)
   for(i in seq_along(difflist)){
     if(verbose){ setTxtProgressBar(pb,i) }
-    ssid<-difflist[[i]][[".subscore"]][1]
+    ssid<-difflist[[i]][[".subscore"]][1L]
     diffid<-names(difflist)[i]
     
     if(aggdim=="vector"){
@@ -286,7 +286,7 @@ rapidsplit<-function(data,subjvar,diffvars=NULL,stratvars=NULL,subscorevar=NULL,
   if(verbose){close(pb)}
   
   # Get scores
-  if(length(diffvars)>0){
+  if(length(diffvars)>0L){
     diffidx[[".valence"]]<-Reduce(`*`,x=clamp.range(diffidx[diffvars]))
     keyscores<-antikeyscores<-matrix(ncol=splits,nrow=length(subscores))
     rownames(keyscores)<-rownames(antikeyscores)<-subscores
@@ -310,7 +310,7 @@ rapidsplit<-function(data,subjvar,diffvars=NULL,stratvars=NULL,subscorevar=NULL,
     rownames(keysds)<-rownames(antikeysds)<-subscores
     if(verbose){
       cat("Computing standard deviations to standardize scores by...\n")
-      pb = txtProgressBar(min = 0, max = length(subscorelist), initial = 0) 
+      pb <- txtProgressBar(min = 0L, max = length(subscorelist), initial = 0L) 
     }
     for(ss in subscores){
       if(verbose){ setTxtProgressBar(pb,which(ss==subscores)) }
@@ -323,7 +323,7 @@ rapidsplit<-function(data,subjvar,diffvars=NULL,stratvars=NULL,subscorevar=NULL,
   }
   
   # Aggregate into single scores, if there were subscores
-  if(length(subscorevar)>0){
+  if(length(subscorevar)>0L){
     newkeyscores<-newantikeyscores<-matrix(ncol=splits,nrow=length(pps))
     rownames(newkeyscores)<-rownames(newantikeyscores)<-pps
     for(i in seq_along(pps)){
@@ -374,7 +374,7 @@ print.rapidsplit<-function(x,...){
                   "rSB (",mf(x$nobs-2),") = ",mf(x$r),
                   ", 95%CI [", mf(quantile(x$allcors,.025)), 
                   ", ", mf(quantile(x$allcors,.975)),"]",
-                  ", p = ",mf(r2p(x$r,x$nobs),digits=3),
+                  ", p = ",mf(r2p(x$r,x$nobs),digits=3L),
                   ", based on ",length(x$allcors)," permutations","\n")
   cat(coefstr,sep="")
 }
@@ -383,7 +383,8 @@ print.rapidsplit<-function(x,...){
 #' By default, this plots the random split whose correlation is closest to the average.
 #' However, this can also plot the random split with 
 #' the \code{"minimum"} or \code{"maximum"} split-half correlation, or any \code{"random"} split. 
-#' \code{"all"} splits can also be plotted together in one figure.
+#' \code{"all"} splits can also be plotted together in one figure, while
+#' \code{"many"} implies 1000 splits (or less, in case less than 1000 were computed).
 #' @param show.labels Should participant IDs be shown above their points in the scatterplot?
 #' Defaults to \code{TRUE} and is ignored when \code{type} is \code{"all"}.
 #'
@@ -408,19 +409,23 @@ plot.rapidsplit<-function(x,type=c("average","minimum","maximum","random","all")
     idx<-which.max(x$allcors)
   }else if(type=="random"){
     title<-"Split-half Scatterplot for Random Iteration"
-    idx<-sample(seq_along(x$allcors),1)
+    idx<-sample(seq_along(x$allcors),1L)
   }else if(type=="all"){
     title<-"Split-half Scatterplot for All Iterations"
     idx<-seq_along(x$allcors)
+  }else if(type=="many"){
+    niters<-max(length(x$allcors),1000L)
+    title<-paste0("Split-half Scatterplot for ",niters," Iterations")
+    idx<-sample(seq_along(x$allcors),niters)
   }
-  title <- paste0(title,"\n(r = ", mf(ifelse(length(idx)==1,x$allcors[idx],x$r)),")")
+  title <- paste0(title,"\n(r = ", mf(ifelse(length(idx)==1L,x$allcors[idx],x$r)),")")
   
   h1vals<-x$scores$half1[,idx] |> as.vector()
   h2vals<-x$scores$half2[,idx] |> as.vector()
   plot(h1vals,h2vals,pch=20,main=title,
        xlab="Half 1 computed score",ylab="Half 2 computed score",
-       col=rgb(0,0,0,ifelse(length(idx)==1,1,1/sqrt(length(idx)))))
-  if(length(idx)==1 & show.labels){
+       col=rgb(0,0,0,ifelse(length(idx)==1L,1,1/sqrt(length(idx)))))
+  if(length(idx)==1L && show.labels){
     text(h1vals,h2vals,rownames(x$scores$half1),cex= 0.7, pos=3, offset=0.3)
   }
 }
@@ -446,13 +451,13 @@ plot.rapidsplit<-function(x,type=c("average","minimum","maximum","random","all")
 #'                   sample.chunksize=50)
 #' 
 rapidsplit.chunks <-
-  function(data,subjvar,diffvars=NULL,stratvars=NULL,subscorevar=NULL,
-           aggvar,splits=6000,
+  function(data,subjvar,aggvar,diffvars=NULL,stratvars=NULL,subscorevar=NULL,
+           splits=6000L,
            aggfunc=c("means","medians"),
            errorhandling=list(type=c("none","fixedpenalty"),
                               errorvar=NULL,fixedpenalty=600,blockvar=NULL),
            standardize=FALSE,include.scores=TRUE,verbose=TRUE,check=TRUE,
-           split.chunksize=10000,sample.chunksize=200){
+           split.chunksize=10000L,sample.chunksize=200L){
     
     # process errorhandling object
     errorhandling <- checkerrorhandling(errorhandling)
@@ -476,7 +481,7 @@ rapidsplit.chunks <-
                            length(allpps) %% sample.chunksize)
     if(sample.chunksizes[length(sample.chunksizes)]==1){
       sample.chunksizes[length(sample.chunksizes)-1] <- sample.chunksizes[length(sample.chunksizes)-1] + 1
-      sample.chunksizes <- sample.chunksizes[seq_len(length(sample.chunksizes)-1)]
+      sample.chunksizes <- sample.chunksizes[seq_len(length(sample.chunksizes)-1L)]
     }
     sample.chunks <- split(allpps,rep(seq_along(sample.chunksizes),times=sample.chunksizes))
   
@@ -484,12 +489,12 @@ rapidsplit.chunks <-
     outcomes<-list()
     if(verbose){ 
       cat("Running rapidsplit() in chunks...\n")
-      pb = txtProgressBar(min = 0, max = length(split.chunks)*length(sample.chunks), initial = 0)  
+      pb <- txtProgressBar(min = 0L, max = length(split.chunks)*length(sample.chunks), initial = 0L)  
     }
     for(i in seq_along(split.chunks)){
       splitoutcomes <- list()
       for(j in seq_along(sample.chunks)){
-        if(verbose){ setTxtProgressBar(pb,(i-1)*length(sample.chunks)+j+1) }
+        if(verbose){ setTxtProgressBar(pb,(i-1L)*length(sample.chunks)+j+1L) }
         splitoutcomes[[j]] <-
           rapidsplit(data=data[data[[subjvar]] %fin% sample.chunks[[j]],],
                      subjvar=subjvar,

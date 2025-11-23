@@ -32,38 +32,43 @@ NULL
 #' @export
 #' @describeIn correlation-tools Converts correlation coefficients to z-scores.
 r2z<-function(r){
-  z<-.5 * (log(1+r) - log(1-r))
-  return(z)
+  .5 * (log(1+r) - log(1-r))
 }
 #' @export
 #' @describeIn correlation-tools Converts z-scores to correlation coefficients.
 z2r<-function(z){
   r<-(exp(2*z)-1)/(exp(2*z)+1)
-  rma<-which(is.nan(r))
+  rma<-which(is.nan(r) & !is.nan(z))
   r[rma]<-ifelse(z[rma]>0,1,-1)
   return(r)
 }
 
 #' @export
 #' @describeIn correlation-tools Converts correlation coefficients to t-scores.
-r2t<-function(r,n){ (r*sqrt(n-2))/sqrt(1-r^2) }
+r2t<-function(r,n){ 
+  (r*sqrt(n-2))/sqrt(1-r^2)
+}
 
 #' @export
 #' @describeIn correlation-tools Converts t-scores to correlation coefficients.
-t2r<-function(t,n){ sqrt(t/sqrt(t^2+n-2)) }
+t2r<-function(t,n){ 
+  sqrt(t/sqrt(t^2+n-2))
+}
 
 #' @export
 #' @describeIn correlation-tools Computes the two-sided p-value for a given correlation.
-r2p<-function(r,n){ 2*pt(abs(r2t(r,n)),n-2,lower.tail=FALSE) }
+r2p<-function(r,n){ 
+  2*pt(abs(r2t(r,n)),n-2,lower.tail=FALSE)
+}
 
 #' @export
 #' @describeIn correlation-tools Computes confidence intervals for one or multiple correlation coefficients.
 rconfint<-function(r,n,alpha=.05){
   z <- r2z(r)
   zint <- qnorm(1 - alpha/2) * sqrt(1/(n - 3))
-  if(length(r)==1){
+  if(length(r)==1L){
     confints <- c(z2r(z - zint), z2r(z + zint))
-  }else if(length(r)>1){
+  }else if(length(r)>1L){
     confints <- cbind(z2r(z - zint), z2r(z + zint))
   }else{
     confints <- NULL
@@ -121,10 +126,10 @@ print.compcorr<-function(x,...){
 #' comprel(rel1,rel2,alternative="greater")
 #' 
 comprel <- function(x,y,alternative=c("two.sided","less","greater")){
-  if(class(x)=="rapidsplit"){ x <- x$allcors }
-  if(class(y)=="rapidsplit"){ y <- y$allcors }
+  if(inherits(x,"rapidsplit")){ x <- x$allcors }
+  if(inherits(y,"rapidsplit")){ y <- y$allcors }
   minlength <- min(length(x),length(y))
-  if(minlength<1000){
+  if(minlength<1000L){
     warning("Insufficient split-half iterations in x and/or y.")
   }
   alternative<-match.arg(alternative)
@@ -176,20 +181,20 @@ cormean<-function(r,n,weights=c("none","n","df"),
   type<-match.arg(type)
   weights<-match.arg(weights)
   
-  if(length(r)==1){
+  if(length(r)==1L){
     return(r)
-  }else if(length(n)==1){
+  }else if(length(n)==1L){
     n<-rep(n,length(r))
   }
   
   if(na.rm){
     missing<-which(is.na(r) | is.na(n))
-    if(length(missing)>0){
+    if(length(missing)>0L){
       r<-r[-missing]
       n<-n[-missing]
     }
   }
-  weight<-list(rep(1,times=length(n)),n,n-1)[[1+(weights=="n")+2*(weights=="df")]]
+  weight<-list(rep(1,times=length(n)),n,n-1)[[1L+(weights=="n")+2L*(weights=="df")]]
   if(length(r)!=length(n)){
     stop("Length of r and n not equal!")
   }
