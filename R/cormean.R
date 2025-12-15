@@ -52,7 +52,7 @@ r2t<-function(r,n){
 #' @export
 #' @describeIn correlation-tools Converts t-scores to correlation coefficients.
 t2r<-function(t,n){ 
-  sqrt(t/sqrt(t^2+n-2))
+  t/sqrt(t^2+n-2)
 }
 
 #' @export
