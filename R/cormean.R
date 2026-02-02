@@ -32,15 +32,17 @@ NULL
 #' @export
 #' @describeIn correlation-tools Converts correlation coefficients to z-scores.
 r2z<-function(r){
-  .5 * (log(1+r) - log(1-r))
+  #.5 * (log(1+r) - log(1-r))
+  atanh(r)
 }
 #' @export
 #' @describeIn correlation-tools Converts z-scores to correlation coefficients.
 z2r<-function(z){
-  r<-(exp(2*z)-1)/(exp(2*z)+1)
-  rma<-which(is.nan(r) & !is.nan(z))
-  r[rma]<-ifelse(z[rma]>0,1,-1)
-  return(r)
+  # r<-(exp(2*z)-1)/(exp(2*z)+1)
+  # rma<-which(is.nan(r) & !is.nan(z))
+  # r[rma]<-ifelse(z[rma]>0,1,-1)
+  # return(r)
+  tanh(z)
 }
 
 #' @export
