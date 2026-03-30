@@ -35,6 +35,7 @@ r2z<-function(r){
   #.5 * (log(1+r) - log(1-r))
   atanh(r)
 }
+
 #' @export
 #' @describeIn correlation-tools Converts z-scores to correlation coefficients.
 z2r<-function(z){

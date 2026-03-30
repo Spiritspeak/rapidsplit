@@ -24,7 +24,7 @@ rapidsplit(
   check = TRUE
 )
 
-\method{print}{rapidsplit}(x, ...)
+\method{print}{rapidsplit}(x, goal_r = 0.8, ...)
 
 \method{plot}{rapidsplit}(
   x,
@@ -99,6 +99,8 @@ will be based on the unpenalized SD of correct and incorrect trials, as in the I
 
 \item{x}{\code{rapidsplit} object to print or plot.}
 
+\item{goal_r}{A goal reliability value, which will be used to compute the required test size.}
+
 \item{...}{Ignored.}
 
 \item{type}{Character argument indicating what should be plotted. 
@@ -120,7 +122,7 @@ A \code{list} containing
 \item \code{r}: the averaged reliability.
 \item \code{ci}: the 95\% confidence intervals.
 \item \code{allcors}: a vector with the reliability of each iteration.
-\item \code{nobs}: the number of participants.
+\item \code{nobs}: a vector with (1) the number of participants and (2) the average number of values per participant.
 \item \code{rcomponents}: a list containing the mean variance of the scores of both halves,
 as well as their mean covariance.
 \item \code{scores}: the individual participants scores in each split-half,
@@ -168,7 +170,7 @@ after splitting, or you can process your data before splitting and forgo these t
 
 data(foodAAT)
 # Reliability of the double difference score:
-# [RT(push food)-RT(pull food)] - [RT(push object)-RT(pull object)]
+# {RT(push food)-RT(pull food)} - {RT(push object)-RT(pull object)}
 
 frel<-rapidsplit(data=foodAAT,
                  subjvar="subjectid",

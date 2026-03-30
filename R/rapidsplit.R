@@ -44,7 +44,7 @@
 #' 
 #' * \code{allcors}: a vector with the reliability of each iteration.
 #' 
-#' * \code{nobs}: the number of participants.
+#' * \code{nobs}: a vector with (1) the number of participants and (2) the average number of values per participant.
 #' 
 #' * \code{rcomponents}: a list containing the mean variance of the scores of both halves, 
 #' as well as their mean covariance.
@@ -65,7 +65,8 @@
 #' after splitting, or you can process your data before splitting and forgo these two options.
 #' 
 #' @details
-#' The order of operations (with optional steps between brackets) is: 
+#' [rapidsplit()] computes split-half reliability using the following sequence of operations
+#' (with optional steps between brackets): 
 #' * Splitting
 #' * (Replacing error trials within block within split)
 #' * Computing aggregates per condition (per subscore) per person
@@ -96,7 +97,7 @@
 #' 
 #' data(foodAAT)
 #' # Reliability of the double difference score:
-#' # [RT(push food)-RT(pull food)] - [RT(push object)-RT(pull object)]
+#' # {RT(push food)-RT(pull food)} - {RT(push object)-RT(pull object)}
 #' 
 #' frel<-rapidsplit(data=foodAAT,
 #'                  subjvar="subjectid",
@@ -341,13 +342,16 @@ rapidsplit<-function(data,subjvar,aggvar,diffvars=NULL,stratvars=NULL,subscoreva
   
   # Get correlations
   coraggs<-corStatsByColumns(keyscores,antikeyscores)
+  
+  # Get other stats
   sampsize<-length(pps)
+  testsize<-mean(sapply(pps,\(x)sum(arr.ds[[subjvar]]==x)))
   
   # Form output
   out<-list(r=spearmanBrown(coraggs$cormean),
             ci=quantile(spearmanBrown(coraggs$allcors),c(.025,.975)),
             allcors=spearmanBrown(coraggs$allcors),
-            nobs=sampsize,
+            nobs=c(sampsize=sampsize,testsize=testsize),
             rcomponents=list(half1var=coraggs$meanxvar,
                              half2var=coraggs$meanyvar,
                              covar=coraggs$meancovar))
@@ -366,17 +370,22 @@ rapidsplit<-function(data,subjvar,aggvar,diffvars=NULL,stratvars=NULL,subscoreva
 }
 
 #' @param x \code{rapidsplit} object to print or plot.
+#' @param goal_r A goal reliability value, which will be used to compute the required test size.
 #' @param ... Ignored.
 #' @export
 #' @rdname rapidsplit
-print.rapidsplit<-function(x,...){
+print.rapidsplit<-function(x,goal_r=.80,...){
   coefstr<-paste0("Full-length reliability (Spearman-Brown coefficient):\n",
-                  "rSB (",mf(x$nobs-2),") = ",mf(x$r),
-                  ", 95%CI [", mf(quantile(x$allcors,.025)), 
-                  ", ", mf(quantile(x$allcors,.975)),"]",
-                  ", p = ",mf(r2p(x$r,x$nobs),digits=3L),
+                  "rSB (",mf(x$nobs[1]-2),") = ",mf(x$r),
+                  ", 95%CI [", mf(x$ci[1]), 
+                  ", ", mf(x$ci[2]),"]",
+                  ", p = ",mf(r2p(x$r,x$nobs[1]),digits=3L),
                   ", based on ",length(x$allcors)," permutations","\n")
   cat(coefstr,sep="")
+  rss<-requiredTestSize(obs_r=c(x$r,x$ci),n=x$nobs[2],goal_r=goal_r)
+  sizestr<-paste0("To achieve r = ",mf(goal_r),", the required test size is ",
+                  mf(rss[1],0),", 95%CI [",mf(rss[3],0),", ",mf(rss[2],0),"]")
+  cat(sizestr,sep="")
 }
 
 #' @param type Character argument indicating what should be plotted. 
@@ -536,7 +545,8 @@ rapidsplit.chunks <-
     half1var <- mean(unlist(lapply(outcomes,\(x){ x$corstats$xvar })))
     half2var <- mean(unlist(lapply(outcomes,\(x){ x$corstats$yvar })))
     covar <- mean(unlist(lapply(outcomes,\(x){ x$corstats$covar })))
-    output[["nobs"]] <- length(allpps)
+    testsize <- mean(sapply(allpps,\(x)sum(data[[subjvar]]==x)))
+    output[["nobs"]] <- c(sampsize=length(allpps),testsize=testsize)
     output[["r"]] <- spearmanBrown(covar/sqrt(half1var*half2var))
     output[["rcomponents"]] <- list(half1var=half1var,
                                     half2var=half2var,
